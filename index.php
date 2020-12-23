@@ -1,5 +1,8 @@
 <?php
     session_start();
+    require_once("verifyEmail.php");
+    require_once("./config/setup.php");
+
     if (isset($_SESSION["account"]))
     {
         header("Location: app.php");
@@ -7,8 +10,8 @@
     }
     else if (isset($_POST["email"]) && isset($_POST["pass"]))
     {
-        if ($_POST["email"] === "")
-            $_SESSION["error"] = "Please enter your E-mail";
+        if (verifyEmail($_POST["email"]) == FALSE)
+            $_SESSION["error"] = "Please enter a valid e-mail address";
         else if ($_POST["pass"] === "")
             $_SESSION["error"] = "Please Enter your Password";
         if (isset($_SESSION["error"]))
@@ -16,16 +19,23 @@
             header("Location: index.php");
             return ;
         }
-        if ($_POST[pass] === "1337")
+        $options = [
+            'salt' => "THEUNIVERSEI-SEXPANDING",
+        ];
+        $hashed_password = password_hash($_POST["pass"], PASSWORD_BCRYPT, $options);
+        $sql_query = "SELECT email, password FROM `members` WHERE email = :email AND password = :pass";
+        $stmt = $pdo->prepare($sql_query);
+        $stmt->execute(array(':email' => $_POST["email"], ':pass' => $hashed_password));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row === FALSE)
         {
-            $_SESSION["account"] = $_POST["email"];
-            header("Location: app.php");
+            $_SESSION["error"] = "Please check your entries and try again.";
+            header("Location: index.php");
             return ;
         }
         else
         {
-            $_SESSION["error"] = "Incorrect Password";
-            header("Location: index.php");
+            header("Location: app.php");
             return ;
         }
     }
