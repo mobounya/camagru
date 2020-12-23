@@ -35,6 +35,7 @@
         }
         else
         {
+            $_SESSION["account"] = $_POST["email"];
             header("Location: app.php");
             return ;
         }
