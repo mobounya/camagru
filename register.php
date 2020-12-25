@@ -3,6 +3,20 @@
     require_once("./config/setup.php");
     require_once("verifyEmail.php");
 
+    function    insert_user($username, $email, $password)
+    {
+        global $pdo;
+    
+        $options = [
+            'salt' => "THEUNIVERSEI-SEXPANDING",
+        ];
+        $hashed_pass = password_hash($password, PASSWORD_BCRYPT, $options);
+        $sql = "INSERT INTO members (username, email, password) VALUES (:username, :email, :pass)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array(':username' => $username, ':email' => $email, ':pass' => $hashed_pass));
+        return ;
+    }
+
     if (isset($_SESSION["account"]))
     {
         header("Location: app.php");
@@ -16,13 +30,7 @@
             header("Location: register.php");
             return;
         }
-        $options = [
-            'salt' => "THEUNIVERSEI-SEXPANDING",
-        ];
-        $hashed_pass = password_hash($_POST["pass"], PASSWORD_BCRYPT, $options);
-        $sql = "INSERT INTO members (username, email, password) VALUES (:username, :email, :pass)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(array(':username' => $_POST['username'], ':email' => $_POST['email'], ':pass' => $hashed_pass));
+        insert_user($_POST["username"], $_POST["email"], $_POST["pass"]);
         header("Location: index.php");
         return ;
     }
