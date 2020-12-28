@@ -2,6 +2,7 @@
     session_start();
     require_once("./config/setup.php");
     require_once("verifyEmail.php");
+    require_once("verification.php");
 
     function    insert_user($username, $email, $password)
     {
@@ -14,6 +15,22 @@
         $sql = "INSERT INTO members (username, email, password) VALUES (:username, :email, :pass)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(array(':username' => $username, ':email' => $email, ':pass' => $hashed_pass));
+        return ;
+    }
+
+    function    generate_randtoken()
+    {
+        $token = hash("sha256", random_int(1000, 1000000));
+        return ($token);
+    }
+
+    function    insertToken($email, $token)
+    {
+        global $pdo;
+
+        $query = "INSERT INTO email_tokens (email, token) VALUES (:email, :token)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array(':email' => $email, ':token' => $token));
         return ;
     }
 
@@ -30,7 +47,10 @@
             header("Location: register.php");
             return;
         }
+        $token = generate_randtoken();
+        insertToken($_POST["email"], $token);
         insert_user($_POST["username"], $_POST["email"], $_POST["pass"]);
+        send_Veremail($email, $username, $token);
         header("Location: index.php");
         return ;
     }

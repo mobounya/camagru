@@ -1,0 +1,13 @@
+version : "3.9"
+
+services:
+    camagru:
+        build: ./
+        ports:
+            - 8080:80
+            - 1080:1080
+        volumes:
+            - ./:/app
+            - database:/var/lib/mysql
+volumes:
+    database:
