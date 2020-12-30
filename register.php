@@ -29,7 +29,7 @@
         global $pdo;
 
         $query = "INSERT INTO email_tokens (email, token) VALUES (:email, :token)";
-        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare($query);
         $stmt->execute(array(':email' => $email, ':token' => $token));
         return ;
     }
@@ -50,7 +50,7 @@
         $token = generate_randtoken();
         insertToken($_POST["email"], $token);
         insert_user($_POST["username"], $_POST["email"], $_POST["pass"]);
-        send_Veremail($email, $username, $token);
+        send_Veremail($_POST["email"], $_POST["username"], $token);
         header("Location: index.php");
         return ;
     }

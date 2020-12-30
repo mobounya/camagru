@@ -52,7 +52,7 @@
         <form method="POST">
             <h2 style="margin-bottom : 30px"> Please Log-in or Create a new account </h2>
             <?php
-                if ($_SESSION["error"])
+                if (isset($_SESSION["error"]))
                 {
                     echo "<p style=\"color: red\">";
                     echo $_SESSION["error"];
