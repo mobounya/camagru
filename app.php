@@ -29,11 +29,7 @@
             </li>
         </ul>
     </div>
-    <div>
-        <script>
-            
-        </script>
-    </div>
+
     <?php
         if (isset($_SESSION["verification"]))
         {
@@ -43,5 +39,24 @@
             unset($_SESSION["verification"]);
         }
     ?>
+    <video autoplay> </video>
+    <script>
+        function hasGetUserMedia()
+        {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+                return true;
+            else
+                return false;
+        }
+        if (hasGetUserMedia() == true)
+        {
+            alert("Got media");
+            const constraints = {video: true};
+            const video = document.querySelector("video");
+            navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+                video.srcObject = stream;
+            });
+        }
+    </script>
 </body>
 </html>
