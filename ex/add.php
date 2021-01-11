@@ -1,19 +1,26 @@
 <?php
     session_start();
     require_once("./config/setup.php");
+    if (!isset($_SESSION["user_id"]))
+    {
+        die("ACCESS DENIED");
+        return ;
+    }
     if (isset($_POST["first_name"]) && isset($_POST["last_name"]) && isset($_POST["email"]) && isset($_POST["headline"]) && isset($_POST["summary"]))
     {
         $stmt = $pdo->prepare('INSERT INTO Profile
         (user_id, first_name, last_name, email, headline, summary)
         VALUES ( :uid, :fn, :ln, :em, :he, :su)');
-      
-      $stmt->execute(array(
+        $stmt->execute(array(
         ':uid' => $_SESSION['user_id'],
         ':fn' => $_POST['first_name'],
         ':ln' => $_POST['last_name'],
         ':em' => $_POST['email'],
         ':he' => $_POST['headline'],
         ':su' => $_POST['summary']));
+        $_SESSION["success"] = "Profile added";
+        header("Location: index.php");
+        return ;
     }
 ?>
 <!DOCTYPE html>

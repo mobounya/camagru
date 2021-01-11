@@ -5,7 +5,7 @@
     if (isset($_POST["email"]) && isset($_POST["pass"]))
     {
         unset($_SESSION["user"]);
-        unset($_SESSION["userid"]);
+        unset($_SESSION["user_id"]);
         $h_pass = hash("md5", "XyZzy12*_".$_POST["pass"]);
         $sql = "SELECT user_id, name, email, password FROM users WHERE email = :email AND password = :pass";
         $stmt = $pdo->prepare($sql);
@@ -33,6 +33,19 @@
 <title>Mohamed amine Bounya</title>
 </head>
 <body>
+    <script>
+        function doValidate() 
+        {
+            console.log('Validating...');
+            $pass = document.getElementById('pass').value;
+            $email = document.getElementById('email').value;
+            if ($pass == "" || $pass == null || $email == "" || $pass == null)
+            {
+                alert("Both fields are required");
+                return false;
+            }
+        }
+    </script>
     <div style="margin-top: 45px; margin-left: 45px;">
         <h2> Please Log-in </h2>
         <?php
@@ -51,7 +64,7 @@
                 <label for="pass">Password: </label>
                 <input type="password" id="pass" name="pass">
             </div>
-            <input type="submit" value="Login" style="margin-top: 10px">
+            <input type="submit" onclick="return doValidate();" value="Login" style="margin-top: 10px">
         </form>
     </div>
 </body>
