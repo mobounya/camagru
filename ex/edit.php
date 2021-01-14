@@ -9,7 +9,7 @@
     if (isset($_POST["first_name"]) && isset($_POST["last_name"]) && isset($_POST["email"]) &&
         isset($_POST["profile_id"]) && isset($_POST["headline"]) && isset($_POST["summary"]))
     {
-        $query = "UPDATE `Profile` SET first_name = :fn, last_name = :ln, email = :em, headline = :hd, summary = :sm WHERE profile_id = :pf_id";
+        $query = "UPDATE `Profile` SET first_name = :fn, last_name = :ln, email = :em, headline = :hd, summary = :sm WHERE profile_id = :pf_id AND user_id = :user_id";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
             ":fn" => $_POST["first_name"],
@@ -17,7 +17,8 @@
             ":em" => $_POST["email"],
             ":hd" => $_POST["headline"],
             ":sm" => $_POST["summary"],
-            ":pf_id" => $_POST["profile_id"]
+            ":pf_id" => $_POST["profile_id"],
+            ":user_id" => $_SESSION["user_id"]
         ));
         $_SESSION["success"] = "Profile edited successfully";
         header("Location: index.php");
@@ -81,6 +82,7 @@
                 <?= '<textarea id="summary" name="summary" rows="4" cols="50">' . $row["summary"] . '</textarea>' ?>
             </div>
             <?= '<input type="hidden" name="profile_id" value="' .  $row["profile_id"] . '">'?>
+            <div style="margin-top: 15px"> Education: <input type="submit" id="addEdu" value="+"> </div> <br>
             <input type="submit" value="Edit" style="margin-top: 15px;">
         </form>
     </div>

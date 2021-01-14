@@ -50,6 +50,7 @@
                 <label for="summary">Summary: </label> <br>
                 <textarea id="w3review" name="summary" rows="4" cols="50"></textarea>
             </div>
+             
             <input type="submit" value="Add" style="margin-top: 15px;">
         </form>
     </div>

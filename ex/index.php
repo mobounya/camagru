@@ -15,11 +15,8 @@
         </style>
     </head>
 <body>
-    <?php
-        $sql_query = "SELECT profile_id, first_name, last_name, headline, user_id FROM `Profile`";
-        $stmt = $pdo->prepare($sql_query);
-        $stmt->execute();
-    ?>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
     <div style="margin-top: 60px; margin-left: 50px;">
         <h2>Mohamed amine bounya resume registry</h2>
         <?php
@@ -45,23 +42,32 @@
                         echo "<th>Action</th>";
                 ?>
             </tr>
-            <?php
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
-                {
-                    echo "<tr>"; 
-                    echo '<td><a href="view.php?profile_id='. $row["profile_id"] .'">' . $row["first_name"] . " " . $row["last_name"] . "</a></td>";
-                    echo "<td>" . $row["headline"] . "</td>";
-                    if (isset($_SESSION["user_id"]) && $row["user_id"] === $_SESSION["user_id"])
-                    {
-                        echo "<td>";
-                        echo "<p><a href=\"edit.php?profile_id=" . $row["profile_id"] . "\">Edit</a>";
-                        echo "<a href=\"delete.php?profile_id=" . $row["profile_id"] . "\"> Delete</a></p>";
-                        echo "</td>";
-                    }
-                    echo "</tr>";
-                }
-            ?>
+            <tbody id="tbody">
+            </tbody>
         </table>
+        <script type="text/javascript">
+            $.getJSON('get_json.php', function (data)
+            {
+                $("#tbody").empty();
+                console.log("got json data");
+                console.log(data);
+                found = false;
+                for (var i = 0; i < data.length; i++)
+                {
+                    entry = data[i];
+                    found = true;
+                    $("#tbody").append("<tr><td>" 
+                    + entry.first_name + " " +  entry.last_name + "</td><td>"
+                    + entry.headline + "</td><td>"
+                    + '<a href="edit.php?profile_id=' + entry.profile_id + '">Edit</a></td></tr>');
+                }
+                if (!found)
+                {
+                    $("#tbody").append("<tr><td> no entries found </tr></td>\n");
+                }
+            }
+            );
+        </script>
         <?php
             echo "<p>";
             if (isset($_SESSION["user"]))
@@ -72,4 +78,4 @@
         ?>
     </div>
 </body>
-</html> 
+</html>
