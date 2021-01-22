@@ -39,24 +39,16 @@
             unset($_SESSION["verification"]);
         }
     ?>
-    <video autoplay> </video>
-    <script>
-        function hasGetUserMedia()
-        {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
-                return true;
-            else
-                return false;
-        }
-        if (hasGetUserMedia() == true)
-        {
-            alert("Got media");
-            const constraints = {video: true};
-            const video = document.querySelector("video");
-            navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-                video.srcObject = stream;
-            });
-        }
-    </script>
+
+    <div id="camContainer" style="margin-left: 25px; margin-top: 50px">
+        <div id="Disposable-imgs" style="border-style: dotted; height: 150px; width: 51%;">
+            <img data-role="sticker" data-name="chefhat" width="180" src="chefhat.png">
+        </div>
+            <video id="video" autoplay style="display: none"></video>
+            <canvas id="canvas"></canvas>
+    </div>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/initCamera.js"></script>
+    <script type="text/javascript" src="/js/handleStickers.js"></script>
 </body>
 </html>
