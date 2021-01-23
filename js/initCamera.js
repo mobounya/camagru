@@ -11,6 +11,9 @@
                 video.srcObject = stream;
             });
     }
+})();
+
+
 
     // video.addEventListener('loadedmetadata', function () {
     //     canvas.width = video.videoWidth;
@@ -26,4 +29,3 @@
     //         }
     //     })();
     // });
-})();

@@ -45,8 +45,12 @@
             <img data-role="sticker" data-name="chefhat" src="smallchefhat.png">
         </div>
         <div style="position: relative; display: inline-block" id="live-video">
-            <video id="video" autoplay></video>
+            <video id="video" autoplay></video> <br>
+            <button id="captures">Capture photo</button>
         </div>
+    </div>
+    <div id="gallery">
+        <canvas id="canvas"></canvas>
     </div>
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/initCamera.js"></script>

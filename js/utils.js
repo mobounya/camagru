@@ -5,6 +5,7 @@ function hasGetUserMedia() {
         return false;
 }
 
+// Create a new sticker.
 function createSticker(src) {
     var sticker = document.createElement("img");
 
@@ -15,4 +16,11 @@ function createSticker(src) {
     sticker.style.transform = "translate(-50%)";
 
     return sticker;
+}
+
+function removeStickers(parent)
+{
+    var old_stickers = parent.querySelectorAll("img");
+
+    old_stickers.forEach((elem) => elem.remove());
 }
