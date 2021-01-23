@@ -1,14 +1,14 @@
 (function placeStickers() {
     var stickers = document.querySelectorAll("[data-role=sticker]");
-    var canvas = document.getElementById('canvas')
-    var context = canvas.getContext('2d');
 
     stickers.forEach(function addListener(img) {
         img.addEventListener("click", function imageClick() {
-            console.log("Clicked");
-            base_image = new Image();
-            base_image.src = 'chefhat.png';
-            context.drawImage(base_image, 150, 150);
+            console.log("Sticker clicked");
+            live_video = document.getElementById("live-video");
+
+            // Create new image and append to div container.
+            var sticker = createSticker(img.src);
+            live_video.appendChild(sticker);
         });
     });
 })();
