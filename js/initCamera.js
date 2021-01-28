@@ -1,15 +1,43 @@
 (function initCamera() {
+    var btnCapture = document.getElementById('btn_captures');
+    var canvas = document.getElementById('canvas');
+    var photo = document.getElementById('photo');    
+    var context = canvas.getContext("2d");
     var video = document.getElementById('video');
-    // var canvas = document.getElementById('canvas');
-    // var context = canvas.getContext('2d');
-    
+    var height;
+    var width;
+
+    /**
+     * Take a picture, draw it in canvas and convert it
+     * to data URI (PNG) to show on the HTML page.
+     */
+    function takepicture()
+    {
+        console.log("taking picture...");
+        canvas.width = width;
+        canvas.height = height;
+
+        context.drawImage(video, 0, 0, width, height);
+        var data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+    }
+
     if (hasGetUserMedia() == true) {
-        var constraints = { video: true };
+        var constraints = { video: true, audio: false};
 
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
                 video.srcObject = stream;
+                video.addEventListener("loadedmetadata", function loadVData() {
+                    height = this.videoHeight;
+                    width = this.videoWidth;
+                })
             });
+        btnCapture.addEventListener("click", function(ev)
+        {
+            takepicture();
+            ev.preventDefault();
+        }, false);
     }
 })();
 

@@ -10,10 +10,12 @@
 
             // Remove previous stickers.
             removeStickers(live_video);
-        
+
             // Create new image and append to div container.
             var sticker = createSticker(img.src);
             live_video.appendChild(sticker);
+            var btnCapture = document.getElementById('btn_captures');
+            btnCapture.disabled = false;
         });
     });
 })();
