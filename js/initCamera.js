@@ -1,25 +1,46 @@
 (function initCamera() {
     var btnCapture = document.getElementById('btn_captures');
     var canvas = document.getElementById('canvas');
-    var photo = document.getElementById('photo');    
+    var photo = document.getElementById('photo');
     var context = canvas.getContext("2d");
     var video = document.getElementById('video');
     var height;
     var width;
 
+    function addImgForm(data)
+    {
+        // Get the form that will append our inputs into.
+        form = document.getElementById('imgForm');
+
+        input = document.createElement("INPUT");
+        saveBtn = document.createElement("INPUT");
+
+        // Fill INPUT with our img data.
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', 'img');
+        input.setAttribute('value', data);
+
+        // Our save button.
+        saveBtn.setAttribute('type', 'submit');
+        saveBtn.setAttribute('value', 'Save');
+
+        form.appendChild(input);
+        form.appendChild(saveBtn);
+    }
     /**
      * Take a picture, draw it in canvas and convert it
      * to data URI (PNG) to show on the HTML page.
      */
-    function takepicture()
+    function takepicture(vid)
     {
         console.log("taking picture...");
         canvas.width = width;
         canvas.height = height;
 
-        context.drawImage(video, 0, 0, width, height);
-        var data = canvas.toDataURL('image/png');
+        context.drawImage(vid, 0, 0, width, height);
+        var data = canvas.toDataURL('image/jpeg');
         photo.setAttribute('src', data);
+        addImgForm(data);
     }
 
     if (hasGetUserMedia() == true) {
@@ -35,7 +56,7 @@
             });
         btnCapture.addEventListener("click", function(ev)
         {
-            takepicture();
+            takepicture(video);
             ev.preventDefault();
         }, false);
     }

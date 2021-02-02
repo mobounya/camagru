@@ -46,10 +46,12 @@
         </div>
         <div style="position: relative; display: inline-block" id="live-video">
             <video id="video" autoplay></video> <br>
-            <button id="btn_captures">Capture Photo</button>
+            <button id="btn_captures" disabled>Capture Photo</button>
         </div>
         <div id="output">
             <img id="photo" alt="The screen capture will appear in this box.">
+            <form id="imgForm" action="/renderImg.php" method="POST">
+            </form>
         </div>
     </div>
     <canvas id="canvas" style="display: none"></canvas>
