@@ -42,7 +42,9 @@
 
     <div id="camContainer" style="margin-left: 25px; margin-top: 50px">
         <div id="Disposable-imgs" style="border-style: dotted; height: 150px; width: 51%;">
-            <img data-role="sticker" data-name="chefhat" src="smallchefhat.png">
+            <img data-role="sticker" data-name="chefhat" src="/assets/images/chefhat.png">
+            <img data-role="sticker" data-name="glasses" src="/assets/images/glasses.png">
+            <img data-role="sticker" data-name="grass" src="/assets/images/grass.png">
         </div>
         <div style="position: relative; display: inline-block" id="live-video">
             <video id="video" autoplay></video> <br>
@@ -50,7 +52,10 @@
         </div>
         <div id="output">
             <img id="photo" alt="The screen capture will appear in this box.">
-            <form id="imgForm" action="/renderImg.php" method="POST">
+            <form action="/renderImg.php" method="POST">
+                <input id="imgInput" type="hidden" name="img" />
+                <input id="stickerInput" type="hidden" name="sticker"/>
+                <button type="submit">Save</button>
             </form>
         </div>
     </div>

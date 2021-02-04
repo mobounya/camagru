@@ -11,18 +11,17 @@
     {
         // Get the form that will append our inputs into.
         form = document.getElementById('imgForm');
-
         input = document.createElement("INPUT");
-        saveBtn = document.createElement("INPUT");
+        saveBtn = document.createElement("button");
 
         // Fill INPUT with our img data.
         input.setAttribute('type', 'hidden');
         input.setAttribute('name', 'img');
         input.setAttribute('value', data);
 
-        // Our save button.
+        // Our save button (remove button).
         saveBtn.setAttribute('type', 'submit');
-        saveBtn.setAttribute('value', 'Save');
+        saveBtn.innerHTML = "Save";
 
         form.appendChild(input);
         form.appendChild(saveBtn);
@@ -40,7 +39,10 @@
         context.drawImage(vid, 0, 0, width, height);
         var data = canvas.toDataURL('image/jpeg');
         photo.setAttribute('src', data);
-        addImgForm(data);
+
+        // Set img data as input in form.
+        var imgInput = document.getElementById("imgInput");
+        imgInput.setAttribute("value", data);
     }
 
     if (hasGetUserMedia() == true) {
