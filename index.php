@@ -23,7 +23,7 @@
             'salt' => "THEUNIVERSEI-SEXPANDING",
         ];
         $hashed_password = password_hash($_POST["pass"], PASSWORD_BCRYPT, $options);
-        $sql_query = "SELECT email, password FROM `members` WHERE email = :email AND password = :pass";
+        $sql_query = "SELECT email, username, password FROM `members` WHERE email = :email AND password = :pass";
         $stmt = $pdo->prepare($sql_query);
         $stmt->execute(array(':email' => $_POST["email"], ':pass' => $hashed_password));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,6 +36,7 @@
         else
         {
             $_SESSION["account"] = $_POST["email"];
+            $_SESSION["username"] = $row["username"];
             header("Location: app.php");
             return ;
         }
