@@ -1,77 +1,60 @@
 <?php
-    session_start();
-    require_once("verifyEmail.php");
-    require_once("./config/setup.php");
-
-    if (isset($_SESSION["account"]))
-    {
-        header("Location: app.php");
-        return ;
-    }
-    else if (isset($_POST["email"]) && isset($_POST["pass"]))
-    {
-        if (verifyEmail($_POST["email"]) == FALSE)
-            $_SESSION["error"] = "Please enter a valid e-mail address";
-        else if ($_POST["pass"] === "")
-            $_SESSION["error"] = "Please Enter your Password";
-        if (isset($_SESSION["error"]))
-        {
-            header("Location: index.php");
-            return ;
-        }
-        $options = [
-            'salt' => "THEUNIVERSEI-SEXPANDING",
-        ];
-        $hashed_password = password_hash($_POST["pass"], PASSWORD_BCRYPT, $options);
-        $sql_query = "SELECT email, username, password FROM `members` WHERE email = :email AND password = :pass";
-        $stmt = $pdo->prepare($sql_query);
-        $stmt->execute(array(':email' => $_POST["email"], ':pass' => $hashed_password));
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row === FALSE)
-        {
-            $_SESSION["error"] = "Please check your entries and try again.";
-            header("Location: index.php");
-            return ;
-        }
-        else
-        {
-            $_SESSION["account"] = $_POST["email"];
-            $_SESSION["username"] = $row["username"];
-            header("Location: app.php");
-            return ;
-        }
-    }
+	session_start();
+	require_once("./config/setup.php");
+	$query = "SELECT * FROM gallery";
+	$stmt = $pdo->prepare($query);
+	$stmt->execute();
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Log-in</title>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+	<title>Gallery</title>
 </head>
 <body>
-    <div style="margin-top: 50px; margin-left: 20px">
-        <form method="POST">
-            <h2 style="margin-bottom : 30px"> Please Log-in or Create a new account </h2>
-            <?php
-                if (isset($_SESSION["error"]))
-                {
-                    echo "<p style=\"color: red\">";
-                    echo $_SESSION["error"];
-                    echo "</p>";
-                    unset($_SESSION["error"]);
-                }
-            ?>
-            <div>
-                <label>E-mail</label><input style="margin-left: 28px;" type="text" name="email"><br>
-            </div>
-            <div>
-                <label>Password</label><input style="margin-left: 10px; margin-top: 7px" type="password" name="pass"><br>
-            </div>
-            <input style="margin-top: 12px;" type="submit" value="Log-in">
-        </form>
-        <form method="GET" action="register.php">
-                <input type="submit" value="Create an account">
-        </form>
+    <div class="ft_navbar">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" href="app.php">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="index.php">Gallery</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Logout</a>
+            </li>
+        </ul>
     </div>
+	<div style="top: 25px; position: relative; display: inline-block" class="border border-5">
+		<div class="card-header">
+		<i class="bi bi-caret-right-fill"></i>
+			mobounya
+		</div>
+		<?php
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$src = $row["image"];
+			echo "<img class=\"img-fluid\" src=\"{$src}\"><br>";
+		?>
+		<i style="margin-left: 5px;" class="bi bi-suit-heart"> 12</i>
+		<h6 style="margin-top: 6px; margin-left: 5px;">Comments</h6>
+		<div class="comment card">
+			<div class="card-body">
+				This what a comment will look like.
+			</div>
+		</div>
+		<div class="comment card">
+			<div class="card-body">
+				This what a second comment will look like.
+			</div>
+		</div>
+		<div id="insertcomment">
+			<h6 style="margin-top: 30px">Insert Comment</h6>
+			<div class="form-group">
+				<textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+  			</div>
+		</div>
+	</div>
 </body>
 </html>

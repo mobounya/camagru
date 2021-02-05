@@ -1,6 +1,11 @@
 <?php
     session_start();
-
+	require_once("./config/setup.php");
+	if (!isset($_SESSION["account"]))
+	{
+		header("Location: index.php");
+		return ;
+	}
     // Verify if sticker img exist, return its path if it does.
     function    verifySticker($sticker)
     {
@@ -23,12 +28,22 @@
 
         $photoName = "photo_" . $username . "_" . rand(10, 10000) . ".jpeg";
         $photoPath = $gallery_path . $photoName;
-        imagejpeg($img, $photoPath);
-    }
+		imagejpeg($img, $photoPath);
+		return ($photoPath);
+	}
+	// Insert Final image into gallery table.
+	function	InsertGallery($member_id, $imgPath)
+	{
+		global $pdo;
+
+		$query = "INSERT INTO gallery (member_id, image) VALUES (:mb_id, :img)";
+		$stmt = $pdo->prepare($query);
+        $stmt->execute(array(':mb_id' => $member_id, ':img' => $imgPath));
+	}
     if (($stickerPath = verifySticker($_POST['sticker'])) === FALSE)
         die("Invalid Sticker");
     
-    // Create jpeg img resource for user photo.
+    // Create jpeg img resource for user_photo.
     $img = imagecreatefromjpeg($_POST["img"]);
     
     // Create png img resource for sticker.
@@ -40,5 +55,7 @@
     // Plce sticker in img.
     imagecopy($img, $sticker, 280, 50, 0, 0, $size[0], $size[1]);
 
-    generateImgFile($_SESSION['username'], $img);
+	$photoPath = generateImgFile($_SESSION['username'], $img);
+    InsertGallery($_SESSION["member_id"], $photoPath);
+    header("Location: app.php");
 ?>

@@ -22,7 +22,7 @@
                 <a class="nav-link active" href="app.php">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Gallery</a>
+                <a class="nav-link" href="index.php">Gallery</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="logout.php">Logout</a>
