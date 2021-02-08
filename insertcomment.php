@@ -3,7 +3,6 @@
     require_once("./config/setup.php");
     if (!isset($_SESSION["account"]))
     {
-        error_log("Not logged in");
         header("Location: index.php");
         return ;
     }

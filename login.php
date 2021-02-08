@@ -47,6 +47,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="styling/app.css" rel="stylesheet">
     <title>Log-in</title>
 </head>
 <body>
@@ -62,17 +66,23 @@
                     unset($_SESSION["error"]);
                 }
             ?>
-            <div>
-                <label>E-mail</label><input style="margin-left: 28px;" type="text" name="email"><br>
-            </div>
-            <div>
-                <label>Password</label><input style="margin-left: 10px; margin-top: 7px" type="password" name="pass"><br>
-            </div>
-            <input style="margin-top: 12px;" type="submit" value="Log-in">
+        <div style="display: inline-block;">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="pass">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Log-in</button>
+                </div>
+            </form>
+        </div>
+        <form action="./register.php" method="GET">
+                <button type="submit" class="btn btn-primary mb-3">Create account</button>
         </form>
-        <form method="GET" action="register.php">
-                <input type="submit" value="Create an account">
-        </form>
-    </div>
 </body>
 </html>

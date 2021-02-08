@@ -58,11 +58,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link href="styling/app.css" rel="stylesheet">
     <title>Create an Account</title>
 </head>
 <body>
-    <div style="margin-top: 50px; margin-left: 30px">
-        <h2>Create an account: </h2>
+    <div style="display: inline-block; margin-top: 50px; margin-left: 30px">
+        <h2>Create an account</h2>
         <?php
             if (isset($_SESSION["error"]))
             {
@@ -70,12 +74,25 @@
                 unset($_SESSION["error"]);
             }
         ?>
-        <form method="POST">
-            <label>E-mail: </label> <input style="margin-left: 26px;" type="text" name="email"><br>
-            <label>Username: </label> <input style="margin-left: 5px; margin-top: 7px" type="text" name="username"><br>
-            <label>Password: </label> <input style="margin-left: 8px; margin-top: 7px" type="password" name="pass"> <br>
-            <input style="margin-top: 15px" type="submit" value="Create account">
-        </form>
+        <div id="registerForm">
+            <form method="POST">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input id="email" type="text" class="form-control" name="email">
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input id="username" type="text" class="form-control" name="username">
+            </div>
+            <div class="mb-3">
+                <label for="pass" class="form-label">Password</label>
+                <input id="pass" type="password" class="form-control" name="pass">
+            </div>
+            <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Create account</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>
