@@ -29,16 +29,16 @@
         $photoName = "photo_" . $username . "_" . rand(10, 10000) . ".jpeg";
         $photoPath = $gallery_path . $photoName;
 		imagejpeg($img, $photoPath);
-		return ($photoPath);
+		return ($photoName);
 	}
 	// Insert Final image into gallery table.
-	function	InsertGallery($member_id, $imgPath)
+	function	InsertGallery($member_id, $photoName)
 	{
 		global $pdo;
 
 		$query = "INSERT INTO gallery (member_id, image) VALUES (:mb_id, :img)";
 		$stmt = $pdo->prepare($query);
-        $stmt->execute(array(':mb_id' => $member_id, ':img' => $imgPath));
+        $stmt->execute(array(':mb_id' => $member_id, ':img' => $photoName));
 	}
     if (($stickerPath = verifySticker($_POST['sticker'])) === FALSE)
         die("Invalid Sticker");
@@ -55,7 +55,7 @@
     // Plce sticker in img.
     imagecopy($img, $sticker, 280, 50, 0, 0, $size[0], $size[1]);
 
-	$photoPath = generateImgFile($_SESSION['username'], $img);
-    InsertGallery($_SESSION["member_id"], $photoPath);
-    header("Location: app.php");
+	$photoName = generateImgFile($_SESSION['username'], $img);
+    InsertGallery($_SESSION["member_id"], $photoName);
+    header("Location: index.php");
 ?>

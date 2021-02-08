@@ -1,9 +1,7 @@
 <?php
 	session_start();
 	require_once("./config/setup.php");
-	$query = "SELECT * FROM gallery";
-	$stmt = $pdo->prepare($query);
-	$stmt->execute();
+	require_once("./getPosts.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,34 +25,18 @@
             </li>
         </ul>
     </div>
-	<div style="top: 25px; position: relative; display: inline-block" class="border border-5">
-		<div class="card-header">
-		<i class="bi bi-caret-right-fill"></i>
-			mobounya
-		</div>
 		<?php
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			$src = $row["image"];
-			echo "<img class=\"img-fluid\" src=\"{$src}\"><br>";
+            $galleryPath = "gallery/";
+			if (isset($_GET["page"]))
+				$current_page = $_GET["page"];
+			else
+				$current_page = 0;
+			$posts = getPosts(5 * $current_page, 5);
+			foreach($posts as $post)
+			{
+				echo renderPost($post["gallery_id"], $post["username"], $galleryPath . $post["image"], $post["likes"]);
+                echo "<div style=\"margin-top: 0px\"> </div>";
+			}
 		?>
-		<i style="margin-left: 5px;" class="bi bi-suit-heart"> 12</i>
-		<h6 style="margin-top: 6px; margin-left: 5px;">Comments</h6>
-		<div class="comment card">
-			<div class="card-body">
-				This what a comment will look like.
-			</div>
-		</div>
-		<div class="comment card">
-			<div class="card-body">
-				This what a second comment will look like.
-			</div>
-		</div>
-		<div id="insertcomment">
-			<h6 style="margin-top: 30px">Insert Comment</h6>
-			<div class="form-group">
-				<textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
-  			</div>
-		</div>
-	</div>
 </body>
 </html>
