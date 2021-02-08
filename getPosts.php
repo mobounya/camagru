@@ -30,12 +30,12 @@
     {
         $container = "<div style=\"top: 25px; position: relative; display: inline-block\" class=\"border border-5\">";
         $header = "<div class=\"card-header\">
-		<i class=\"bi bi-caret-right-fill\"></i>
-            $username
-		</div>";
-        $img = "<img class=\"img-fluid\" src=\"$img\"><br>";
-        $icon = "<i style=\"margin-left: 5px;\" class=\"bi bi-suit-heart\">$likes</i><br>";
-        $comment_link = "<a href=\"comments.php?gallery_id=$gallery_id\">Comments</a>";
+        <i class=\"bi bi-caret-right-fill\"></i>" 
+        . htmlspecialchars($username) . "</div>";
+        $img = "<img class=\"img-fluid\" src=\"" . htmlspecialchars($img) . "\"><br>";
+        
+        $icon = "<i style=\"margin-left: 5px;\" class=\"bi bi-suit-heart\">" . htmlspecialchars($likes) . "</i><br>";
+        $comment_link = "<a href=\"comments.php?gallery_id=" . htmlspecialchars($gallery_id) . "\">Comments</a>";
         return $container . "\n" . $header . "\n" . $img . "\n" . $icon . "\n" . $comment_link . "</div>\n";
     }
 
@@ -57,10 +57,9 @@
 
     function    renderComment($comment, $username)
     {
-       return "<div style=\"margin-top: 40px\" class=\"card\">
-        <i class=\"bi bi-caret-right-fill\">$username</i>
-        <div class=\"card-body\">
-        $comment
-        </div></div>";
+        return "<div style=\"margin-top: 40px\" class=\"card\">
+        <i class=\"bi bi-caret-right-fill\">" . htmlspecialchars($username) . "</i>
+        <div class=\"card-body\">" . htmlspecialchars($comment) . 
+        "</div></div>";
     }
 ?>

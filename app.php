@@ -19,10 +19,10 @@
     <div class="ft_navbar">
         <ul class="nav nav-pills">
             <li class="nav-item">
-                <a class="nav-link active" href="app.php">Home</a>
+                <a class="nav-link" href="app.php">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Gallery</a>
+                <a class="nav-link active" href="index.php">App</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="logout.php">Logout</a>
