@@ -1,5 +1,6 @@
 <?php
 	require_once("./config/setup.php");
+    
     function    getPosts($offset, $nposts)
     {
         global $pdo;
@@ -29,11 +30,10 @@
     function    renderPost($gallery_id, $username, $img, $likes)
     {
         $container = "<div style=\"top: 25px; position: relative; display: inline-block\" class=\"border border-5\">";
-        $header = "<div class=\"card-header\">
-        <i class=\"bi bi-caret-right-fill\"></i>" 
-        . htmlspecialchars($username) . "</div>";
+        $header = "<div style=\"display: flex; justify-content: space-between\" class=\"card-header\">
+        <div> <i class=\"bi bi-caret-right-fill\"></i>"
+        . htmlspecialchars($username) . "</div> <div> <a href=\"deletePost.php?gallery_id=" . htmlspecialchars($gallery_id) . "\"> <i class=\"align-self-end bi bi-trash-fill\"></i> </a> </div>" . "</div>";
         $img = "<img class=\"img-fluid\" src=\"" . htmlspecialchars($img) . "\"><br>";
-        
         $icon = "<i style=\"margin-left: 5px;\" class=\"bi bi-suit-heart\">" . htmlspecialchars($likes) . "</i><br>";
         $comment_link = "<a href=\"comments.php?gallery_id=" . htmlspecialchars($gallery_id) . "\">Comments</a>";
         return $container . "\n" . $header . "\n" . $img . "\n" . $icon . "\n" . $comment_link . "</div>\n";

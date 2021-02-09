@@ -34,16 +34,26 @@
                 }
             }
         ?>
-
-        <div style="margin-top: 30px" id="addComment">
-            <form action="insertcomment.php" method="POST">
-            <input type="hidden" name="gallery_id" value="<?= htmlspecialchars($post["gallery_id"]) ?>">
-            <input type="hidden" name="member_id" value="<?= htmlspecialchars($_SESSION["member_id"]) ?>">
-            <label for="comment">Added a comment</label> <br>
-            <textarea id="comment" name="comment" rows="2" cols="50"> </textarea> <br>
-            <button>Post Comment</button>
-            </form>
-        </div>
+        <?php
+            if (isset($_SESSION['member_id']))
+            {
+                echo "<div style=\"margin-top: 30px\" id=\"addComment\">";
+                echo "<form action=\"insertcomment.php\" method=\"POST\">";
+                echo "<input type=\"hidden\" name=\"gallery_id\" value=\"{$post['gallery_id']}\">";
+                echo "<input type=\"hidden\" name=\"member_id\" value=\"{$_SESSION['member_id']}?>\">";
+                echo "<label for=\"comment\">Added a comment</label> <br>";
+                echo "<textarea id=\"comment\" name=\"comment\" rows=\"2\" cols=\"50\"> </textarea> <br>";
+                echo "<button>Post Comment</button>";
+                echo "</form>";
+                echo "</div>";
+            }
+            else
+            {
+                echo "<div class=\"alert alert-dark\" role=\"alert\">
+                    Please <a href=\"login.php\"> Log-in </a> to post a comment
+                </div>";
+            }
+        ?>
     </div>
 </body>
 </html>

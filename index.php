@@ -26,6 +26,20 @@
         </ul>
     </div>
 		<?php
+            if (isset($_SESSION["error"]))
+            {
+                echo "<div style=\"margin-top: 20px;\" class=\"alert alert-danger\" role=\"alert\">
+                    {$_SESSION["error"]}
+                </div>";
+                unset($_SESSION["error"]);
+            }
+            else if (isset($_SESSION["success"]))
+            {
+                echo "<div style=\"margin-top: 20px;\" class=\"alert alert-success\" role=\"alert\">
+                {$_SESSION["success"]}
+                    </div>";
+                unset($_SESSION["success"]);
+            }
             $galleryPath = "gallery/";
 			if (isset($_GET["page"]))
 				$current_page = $_GET["page"];
