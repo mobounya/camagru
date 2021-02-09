@@ -38,7 +38,8 @@
             $_SESSION["account"] = $row["email"];
             $_SESSION["username"] = $row["username"];
             $_SESSION["member_id"] = $row["member_id"];
-            header("Location: app.php");
+            $_SESSION["success"] = "Logged in successfully";
+            header("Location: index.php");
             return ;
         }
     }
