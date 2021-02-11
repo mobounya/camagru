@@ -14,46 +14,56 @@
 	<title>Comments</title>
 </head>
 <body>
-    <div id="comment_section">
         <?php
             $gallery_path = "gallery/";
             $post = getPostById($_GET["gallery_id"]);
-            echo renderPost($post["gallery_id"], $post["username"], $gallery_path . $post["image"], $post["likes"]);
-            $comments = getComments($_GET["gallery_id"]);
-            if ($comments === NULL)
+            if ($post == NULL)
             {
-                echo "<div style=\"margin-top: 30px\" class=\"alert alert-primary\" role=\"alert\">
-                    No comments on this post !
-                </div>";
+                $_SESSION["error"] = "Post dosen't exist";
+                header("Location: index.php");
+                return ;
             }
+            if (isset($_SESSION['member_id']) && ($post["member_id"] === $_SESSION['member_id']))
+                $delete = TRUE;
             else
+                $delete = FALSE;
+            echo renderPost($post["gallery_id"], $post["username"], $gallery_path . $post["image"], $post["likes"], $delete);
+            $comments = getComments($_GET["gallery_id"]);
+            if ($comments === NULL):
+        ?>
+            <div style="margin-top: 30px" class="alert alert-primary" role="alert">
+                No comments on this post !
+            </div>
+        <?php
+            else:
             {
                 foreach($comments as $comment)
                 {
                     echo renderComment($comment['comment'], $comment['username']);
                 }
             }
+            endif;
         ?>
         <?php
-            if (isset($_SESSION['member_id']))
-            {
-                echo "<div style=\"margin-top: 30px\" id=\"addComment\">";
-                echo "<form action=\"insertcomment.php\" method=\"POST\">";
-                echo "<input type=\"hidden\" name=\"gallery_id\" value=\"{$post['gallery_id']}\">";
-                echo "<input type=\"hidden\" name=\"member_id\" value=\"{$_SESSION['member_id']}?>\">";
-                echo "<label for=\"comment\">Added a comment</label> <br>";
-                echo "<textarea id=\"comment\" name=\"comment\" rows=\"2\" cols=\"50\"> </textarea> <br>";
-                echo "<button>Post Comment</button>";
-                echo "</form>";
-                echo "</div>";
-            }
-            else
-            {
-                echo "<div class=\"alert alert-dark\" role=\"alert\">
-                    Please <a href=\"login.php\"> Log-in </a> to post a comment
-                </div>";
-            }
+            if (isset($_SESSION['member_id'])):
         ?>
-    </div>
+                <div style="margin-top: 30px" id="addComment">
+                <form action="insertcomment.php" method="POST">
+                <input type="hidden" name="gallery_id" value="<?= $post['gallery_id'] ?>">
+                <input type="hidden" name="member_id" value="<?= $_SESSION['member_id'] ?>">
+                <label for="comment">Added a comment</label> <br>
+                <textarea id="comment" name="comment" rows="2" cols="50"> </textarea> <br>
+                <button>Post Comment</button>
+                </form>
+                </div>
+        <?php
+            else:
+        ?>
+                <div style="margin-top: 10px" class="alert alert-dark" role="alert">
+                    Please <a href="login.php">Log-in</a> to post a comment
+                </div>
+        <?php
+            endif;
+        ?>
 </body>
 </html>

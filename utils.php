@@ -35,4 +35,10 @@
         $stmt->closeCursor();
         return $data;
     }
+
+    // Compare password
+    function    comparePassword($pdo, $password)
+    {
+        
+    }
 ?>
