@@ -2,6 +2,8 @@
 	session_start();
 	require_once("./config/setup.php");
     require_once("./getPosts.php");
+    require_once("./utils.php");
+
     if (isset($_SESSION['member_id']))
         $logged = "logout";
     else
@@ -16,7 +18,7 @@
 	<title>Gallery</title>
 </head>
 <body>
-    <div class="ft_navbar">
+    <div class="app-navbar">
         <ul class="nav nav-pills">
             <li class="nav-item">
                 <a class="nav-link active" href="index.php">Home</a>
@@ -31,20 +33,7 @@
     </div>
     <div style="margin-top: 40px; display: inline-block">
 		<?php
-            if (isset($_SESSION["error"]))
-            {
-                echo "<div style=\"margin-top: 20px;\" class=\"alert alert-danger\" role=\"alert\">
-                    {$_SESSION["error"]}
-                </div>";
-                unset($_SESSION["error"]);
-            }
-            else if (isset($_SESSION["success"]))
-            {
-                echo "<div style=\"margin-top: 20px;\" class=\"alert alert-success\" role=\"alert\">
-                {$_SESSION["success"]}
-                    </div>";
-                unset($_SESSION["success"]);
-            }
+            flashMessage();
             $galleryPath = "gallery/";
             if (isset($_GET["page"]))
             {
@@ -105,11 +94,6 @@
                         $next_page = $current_page + 1;
                     echo "<li class=\"page-item $disabled\"><a class=\"page-link\" href=\"index.php?page=$next_page\">Next</a></li>";
                 ?>
-                    <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                 </ul>
             </nav>
         </div>

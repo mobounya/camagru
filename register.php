@@ -1,8 +1,9 @@
 <?php
     session_start();
     require_once("./config/setup.php");
-    require_once("verifyEmail.php");
+    require_once("verifyUserData.php");
     require_once("verification.php");
+    require_once("./utils.php");
 
     function    insert_user($username, $email, $password)
     {
@@ -41,9 +42,20 @@
     }
     if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"]))
     {
-        if (verifyEmail($_POST["email"]) == FALSE)
+        if (verifyEmail($_POST["email"]) == false)
         {
             $_SESSION["error"] = "Please enter a valid e-mail address";
+            header("Location: register.php");
+            return;
+        }
+        if (verifyUsername($_POST["username"]) == false)
+        {
+            header("Location: register.php");
+            return;
+        }
+        if (verifyPassword($_POST["pass"]) == false)
+        {
+            $_SESSION["error"] = "Invalid password.";
             header("Location: register.php");
             return;
         }
@@ -68,11 +80,7 @@
     <div style="display: inline-block; margin-top: 50px; margin-left: 30px">
         <h2>Create an account</h2>
         <?php
-            if (isset($_SESSION["error"]))
-            {
-                echo "<p style=\"color: red\">" . $_SESSION["error"] . "</p>";
-                unset($_SESSION["error"]);
-            }
+            flashMessage();
         ?>
         <div id="registerForm">
             <form method="POST">

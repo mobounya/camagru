@@ -1,7 +1,8 @@
 <?php
     session_start();
-    require_once("verifyEmail.php");
+    require_once("./verifyUserData.php");
     require_once("./config/setup.php");
+    require_once("./utils.php");
 
     if (isset($_SESSION["account"]))
     {
@@ -10,31 +11,33 @@
     }
     else if (isset($_POST["email"]) && isset($_POST["pass"]))
     {
-        if (verifyEmail($_POST["email"]) == FALSE)
-            $_SESSION["error"] = "Please enter a valid e-mail address";
-        else if ($_POST["pass"] === "")
-            $_SESSION["error"] = "Please Enter your Password";
-        if (isset($_SESSION["error"]))
+        if (verifyEmail($_POST["email"]) == false || verifyPassword($_POST["pass"]) == false)
         {
-            header("Location: index.php");
+            header("Location: login.php");
             return ;
         }
         $options = [
             'salt' => "THEUNIVERSEI-SEXPANDING",
         ];
         $hashed_password = password_hash($_POST["pass"], PASSWORD_BCRYPT, $options);
-        $sql_query = "SELECT member_id, email, username, password FROM `members` WHERE email = :email AND password = :pass";
+        $sql_query = "SELECT member_id, email, username, verified FROM `members` WHERE email = :email AND password = :pass";
         $stmt = $pdo->prepare($sql_query);
         $stmt->execute(array(':email' => $_POST["email"], ':pass' => $hashed_password));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row === FALSE)
         {
             $_SESSION["error"] = "Please check your entries and try again.";
-            header("Location: index.php");
+            header("Location: login.php");
             return ;
         }
         else
         {
+            if ($row["verified"] == false)
+            {
+                $_SESSION["verification"] = "Please confirm your email to log-in";
+                header("Location: login.php");
+                return ;
+            }
             $_SESSION["account"] = $row["email"];
             $_SESSION["username"] = $row["username"];
             $_SESSION["member_id"] = $row["member_id"];
@@ -44,7 +47,6 @@
         }
     }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,20 +60,14 @@
     <div style="margin-top: 50px; margin-left: 20px">
         <form method="POST">
             <h2 style="margin-bottom : 30px"> Please Log-in or Create a new account </h2>
-            <?php
-                if (isset($_SESSION["error"]))
-                {
-                    echo "<p style=\"color: red\">";
-                    echo $_SESSION["error"];
-                    echo "</p>";
-                    unset($_SESSION["error"]);
-                }
-            ?>
         <div style="display: inline-block;">
+            <?php
+                flashMessage();
+            ?>
             <form method="POST">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email">
+                    <input type="text" class="form-control" id="email" name="email">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>

@@ -1,6 +1,9 @@
 <?php
     session_start();
     require_once("./getPosts.php");
+    require_once("./utils.php");
+    require_once("./config/setup.php");
+
     if (!isset($_SESSION["member_id"]))
     {
         $_SESSION["error"] = "Please log-in";
@@ -9,17 +12,45 @@
     }
     if (isset($_POST["email"]) || isset($_POST["username"]) || isset($_POST["newpassword1"]) || isset($_POST["notification"]))
     {
-        $email = false;
-        $username = false;
-        $password = false;
+        $email = "";
+        $username = "";
+        $password = "";
         if (!isset($_POST["oldpassword"]) || empty($_POST["oldpassword"]))
         {
             $_SESSION["error"] = "Please provide your old password to save changes.";
             header("Location: profile.php");
             return ;
         }
-        
-
+        else if (comparePassword($pdo, $_SESSION["member_id"], $_POST["oldpassword"]) == false)
+        {
+            $_SESSION["error"] = "Wrong Password, please try again!";
+            header("Location: profile.php");
+            return ;
+        }
+        if (isset($_POST["email"]) && !empty($_POST["email"]))
+        {
+            if (verifyEmail($_POST["email"]) === false)
+            {
+                $_SESSION["error"] = "Please enter a valid E-mail address";
+                header("Location: profile.php");
+                return ;
+            }
+            updateEmail($pdo, $_SESSION["member_id"], $_POST["email"]);
+            $email = "E-mail";
+        }
+        if (isset($_POST["username"]) && !empty($_POST["username"]))
+        {
+            updateUsername($pdo, $_SESSION["member_id"], $_POST["username"]);
+            $username = "Username";
+        }
+        if (isset($_POST["newpassword1"]) && !empty($_POST["newpassword1"]))
+        {
+            updatePassword($pdo, $_SESSION["member_id"], $_POST["newpassword1"]);
+            $password = "Password";
+        }
+        $_SESSION["success"] = "Data changed successfully";
+        header("Location: profile.php");
+        return;
     }
     $profile = getUserDate($_SESSION["member_id"]);
 ?>
@@ -37,20 +68,7 @@
                 <img src="assets/avatar.jpg" alt="Avatar" style="margin: auto; border-radius: 50%;">
             </div>
             <?php
-                if (isset($_SESSION["success"]))
-                {
-                    echo "<div class=\"alert alert-success mt-5\" role=\"alert\">
-                        {$_SESSION["success"]}
-                    </div>";
-                    unset($_SESSION["success"]);
-                }
-                else if (isset($_SESSION["error"]))
-                {
-                    echo "<div class=\"alert alert-danger mt-5\" role=\"alert\">
-                    {$_SESSION["error"]}
-                    </div>";
-                    unset($_SESSION["error"]);
-                }
+                flashMessage();
             ?>
             <div class="px-2 mt-5">
                 <form method="POST">
@@ -64,7 +82,7 @@
                     </div>
                     <div class="form-group">
                         <label for="newpassword">New password</label>
-                        <input type="text" class="form-control" name="newpassword1" id="newpassword" placeholder="New password">
+                        <input type="password" class="form-control" name="newpassword1" id="newpassword" placeholder="New password">
                         <!-- <input style="margin-top: 15px;" type="text" class="form-control" name="newpassword2" id="newpassword" placeholder="Repeat password"> -->
                     </div>
                     <div class="form-check">

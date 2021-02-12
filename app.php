@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require_once("./utils.php");
     if (!isset($_SESSION['account']))
     {
         $_SESSION["error"] = "Please Log-in";
@@ -32,13 +33,7 @@
     </div>
 
     <?php
-        if (isset($_SESSION["verification"]))
-        {
-            echo "<p style=\"color: green\">";
-            echo $_SESSION["verification"];
-            echo "</p>";
-            unset($_SESSION["verification"]);
-        }
+        flashMessage()
     ?>
 
     <div id="camContainer" style="margin-left: 25px; margin-top: 50px">

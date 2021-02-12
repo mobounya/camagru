@@ -3,7 +3,7 @@
     require_once("./config/setup.php");
     require_once("getPosts.php");
     if (!isset($_GET["gallery_id"]))
-        Header("Location: index.php");
+        header("Location: index.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
