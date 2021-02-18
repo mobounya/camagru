@@ -1,15 +1,15 @@
 <?php
-    session_start();
-    require_once("./utils.php");
-    if (!isset($_SESSION['account']))
-    {
-        $_SESSION["error"] = "Please Log-in";
-        header("Location: login.php");
-        return ;
-    }
+session_start();
+require_once("./utils.php");
+if (!isset($_SESSION['account'])) {
+    $_SESSION["error"] = "Please Log-in";
+    header("Location: login.php");
+    return;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,7 @@
     <link href="styling/app.css" rel="stylesheet">
     <title>HOME</title>
 </head>
+
 <body>
     <div class="ft_navbar">
         <ul class="nav nav-pills">
@@ -33,7 +34,7 @@
     </div>
 
     <?php
-        flashMessage()
+    flashMessage()
     ?>
 
     <div id="camContainer" style="margin-left: 25px; margin-top: 50px">
@@ -50,7 +51,7 @@
             <img id="photo" alt="The screen capture will appear in this box.">
             <form action="/renderImg.php" method="POST">
                 <input id="imgInput" type="hidden" name="img" />
-                <input id="stickerInput" type="hidden" name="sticker"/>
+                <input id="stickerInput" type="hidden" name="sticker" />
                 <button type="submit">Save</button>
             </form>
         </div>
@@ -60,4 +61,5 @@
     <script type="text/javascript" src="/js/initCamera.js"></script>
     <script type="text/javascript" src="/js/handleStickers.js"></script>
 </body>
+
 </html>

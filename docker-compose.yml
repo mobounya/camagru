@@ -1,14 +1,14 @@
-version : "3.3"
+version: "3.3"
 
 services:
-    camagru:
-        build: ./
-        ports:
-            - 8080:80
-            - 1080:1080
-            - 443:443
-        volumes:
-            - ./:/app
-            - database:/var/lib/mysql
+  camagru:
+    build: ./
+    ports:
+      - 8080:80
+      - 1080:1080
+      - 443:443
+    volumes:
+      - ./:/app
+      - database:/var/lib/mysql
 volumes:
-    database:
+  database:
