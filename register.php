@@ -9,10 +9,7 @@ function    insert_user($username, $email, $password)
 {
     global $pdo;
 
-    $options = [
-        'salt' => "THEUNIVERSEI-SEXPANDING",
-    ];
-    $hashed_pass = password_hash($password, PASSWORD_BCRYPT, $options);
+    $hashed_pass = password_hash($password, PASSWORD_BCRYPT);
     $sql = "INSERT INTO members (username, email, password) VALUES (:username, :email, :pass)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(array(':username' => $username, ':email' => $email, ':pass' => $hashed_pass));

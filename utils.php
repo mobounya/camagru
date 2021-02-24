@@ -42,27 +42,6 @@ function    getPostOwner($pdo, $gallery_id)
     return $data;
 }
 
-// Compare password
-function    comparePassword($pdo, $member_id, $password)
-{
-    $options = [
-        'salt' => "THEUNIVERSEI-SEXPANDING",
-    ];
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT, $options);
-    $sql_query = "SELECT * FROM `members` WHERE password = :pass AND member_id = :id";
-    $stmt = $pdo->prepare($sql_query);
-    $stmt->execute(array(
-        ':pass' => $hashed_password,
-        ':id' => $member_id
-    ));
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $stmt->closeCursor();
-    if ($row === FALSE)
-        return FALSE;
-    else
-        return TRUE;
-}
-
 // Update member id email
 function    updateEmail($pdo, $member_id, $email)
 {
@@ -90,10 +69,7 @@ function    updateUsername($pdo, $member_id, $username)
 // Update member id password
 function    updatePassword($pdo, $member_id, $password)
 {
-    $options = [
-        'salt' => "THEUNIVERSEI-SEXPANDING",
-    ];
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT, $options);
+    $hashed_password = hashPassword($password);
     $sql_query = "UPDATE `members` SET password=:pass WHERE member_id=:id";
     $stmt = $pdo->prepare($sql_query);
     $stmt->execute(array(
@@ -253,28 +229,3 @@ function array_foreach($callback, $array)
         $callback($key, $value);
     }
 }
-
-// if (!isset($_POST["oldpassword"]) || empty($_POST["oldpassword"])) {
-//     $_SESSION["error"] = "Please provide your old password to save changes.";
-//     header("Location: profile.php");
-//     return;
-// } else if (comparePassword($pdo, $_SESSION["member_id"], $_POST["oldpassword"]) == false) {
-//     $_SESSION["error"] = "Wrong Password, please try again!";
-//     header("Location: profile.php");
-//     return;
-// }
-// if (isset($_POST["email"]) && !empty($_POST["email"])) {
-//     if (verifyEmail($_POST["email"]) === false) {
-//         $_SESSION["error"] = "Please enter a valid E-mail address";
-//         header("Location: profile.php");
-//         return;
-//     }
-//     updateEmail($pdo, $_SESSION["member_id"], $_POST["email"]);
-// }
-// if (isset($_POST["username"]) && !empty($_POST["username"])) {
-//     updateUsername($pdo, $_SESSION["member_id"], $_POST["username"]);
-// }
-// if (isset($_POST["newpassword1"]) && !empty($_POST["newpassword1"])) {
-//     updatePassword($pdo, $_SESSION["member_id"], $_POST["newpassword1"]);
-// }
-// if (isset())
