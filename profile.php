@@ -10,41 +10,71 @@ if (!isset($_SESSION["member_id"])) {
     header("Location: login.php");
     return;
 }
-if (isset($_POST["email"]) || isset($_POST["username"]) || isset($_POST["newpassword1"]) || isset($_POST["notification"])) {
-    $email = "";
-    $username = "";
-    $password = "";
+
+function buildUpdateUserQuery($keys)
+{
+    $query = 'UPDATE `members` SET';
+
+    foreach ($keys as $key) {
+        $query .= " `$key` = :$key,";
+    }
+    $query = substr($query, 0, strlen($query) - 1);
+    $query .= " WHERE member_id = :id";
+    return $query;
+}
+
+if (isset($_POST["email"]) || isset($_POST["oldpassword"]) || isset($_POST["username"]) || isset($_POST["newpassword1"]) || isset($_POST["notification"])) {
+    $fields = [];
+
     if (!isset($_POST["oldpassword"]) || empty($_POST["oldpassword"])) {
         $_SESSION["error"] = "Please provide your old password to save changes.";
         header("Location: profile.php");
         return;
-    } else if (comparePassword($pdo, $_SESSION["member_id"], $_POST["oldpassword"]) == false) {
+    } else if (CheckLoginEntries($pdo, $_POST["email"], $_POST["oldpassword"]) == false) {
         $_SESSION["error"] = "Wrong Password, please try again!";
         header("Location: profile.php");
         return;
     }
+
     if (isset($_POST["email"]) && !empty($_POST["email"])) {
         if (verifyEmail($_POST["email"]) === false) {
             $_SESSION["error"] = "Please enter a valid E-mail address";
             header("Location: profile.php");
             return;
         }
-        updateEmail($pdo, $_SESSION["member_id"], $_POST["email"]);
-        $email = "E-mail";
+        $fields["email"] = $_POST["email"];
     }
     if (isset($_POST["username"]) && !empty($_POST["username"])) {
-        updateUsername($pdo, $_SESSION["member_id"], $_POST["username"]);
-        $username = "Username";
+        if (verifyUsername($_POST["username"])) {
+            $fields["username"] = $_POST["username"];
+        }
     }
     if (isset($_POST["newpassword1"]) && !empty($_POST["newpassword1"])) {
-        updatePassword($pdo, $_SESSION["member_id"], $_POST["newpassword1"]);
-        $password = "Password";
+        $fields["password"] =  hashPassword($_POST["newpassword1"]);
     }
+    if (isset($_POST["notification"])) {
+        $fields["notification"] = 1;
+    } else {
+        $fields["notification"] = 0;
+    }
+    $queryString = buildUpdateUserQuery(array_keys($fields));
+    $fields["id"] = $_SESSION["member_id"];
+    $stmt = $pdo->prepare($queryString);
+    array_foreach(function ($key, $value) {
+        global $stmt;
+        $stmt->bindParam(":$key", $value);
+    }, $fields);
+    $stmt->execute();
+    $stmt->closeCursor();
     $_SESSION["success"] = "Data changed successfully";
     header("Location: profile.php");
     return;
 }
-$profile = getUserDate($_SESSION["member_id"]);
+$profile = getUserData($_SESSION["member_id"]);
+if ($profile["notification"])
+    $checked = "checked";
+else
+    $checked = "";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +83,7 @@ $profile = getUserDate($_SESSION["member_id"]);
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
-    <title><?= $profile[0]["username"] ?> Profile</title>
+    <title><?= $profile["username"] ?> Profile</title>
 </head>
 
 <body>
@@ -68,11 +98,11 @@ $profile = getUserDate($_SESSION["member_id"]);
             <form method="POST">
                 <div class="form-group">
                     <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?= $profile[0]["email"] ?>">
+                    <input type="email" class="form-control" id="email" name="email" value="<?= $profile["email"] ?>">
                 </div>
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" value="<?= $profile[0]["username"] ?>">
+                    <input type="text" class="form-control" id="username" name="username" value="<?= $profile["username"] ?>">
                 </div>
                 <div class="form-group">
                     <label for="newpassword">New password</label>
@@ -87,7 +117,7 @@ $profile = getUserDate($_SESSION["member_id"]);
                     </div>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="true" name="notification" id="notification">
+                    <input class="form-check-input" type="checkbox" value="true" name="notification" id="notification" <?= $checked ?> />
                     <label class="form-check-label" for="notification">
                         Send notification E-mails
                     </label>

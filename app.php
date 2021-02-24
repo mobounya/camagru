@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once("./utils.php");
+require_once("./config/setup.php");
+require_once("./getPosts.php");
 if (!isset($_SESSION['account'])) {
     $_SESSION["error"] = "Please Log-in";
     header("Location: login.php");
@@ -13,7 +15,7 @@ if (!isset($_SESSION['account'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="styling/app.css" rel="stylesheet">
     <title>HOME</title>
 </head>
@@ -34,27 +36,69 @@ if (!isset($_SESSION['account'])) {
     </div>
 
     <?php
-    flashMessage()
+    flashMessage();
     ?>
 
     <div id="camContainer" style="margin-left: 25px; margin-top: 50px">
-        <div id="Disposable-imgs" style="border-style: dotted; height: 150px; width: 51%;">
-            <img data-role="sticker" data-name="chefhat" src="/assets/images/chefhat.png">
-            <img data-role="sticker" data-name="glasses" src="/assets/images/glasses.png">
-            <img data-role="sticker" data-name="grass" src="/assets/images/grass.png">
+        <div id="Disposable-imgs" display="display: inline-block;">
+            <div class="row">
+                <div class="col-sm">
+                    <img data-role="sticker" data-name="chefhat" src="/assets/images/chefhat.png">
+                </div>
+                <div class="col-sm">
+                    <img data-role="sticker" data-name="glasses" src="/assets/images/glasses.png">
+                </div>
+                <div class="col-sm">
+                    <img data-role="sticker" data-name="grass" src="/assets/images/grass.png">
+                </div>
+            </div>
         </div>
         <div style="position: relative; display: inline-block" id="live-video">
-            <video id="video" autoplay></video> <br>
+            <video id="video" width="550px" autoplay></video> <br>
             <button id="btn_captures" disabled>Capture Photo</button>
         </div>
         <div id="output">
-            <img id="photo" alt="The screen capture will appear in this box.">
-            <form action="/renderImg.php" method="POST">
+            <img id="photo" />
+            <form action="/renderImg.php" method="POST" id="myForm">
                 <input id="imgInput" type="hidden" name="img" />
-                <input id="stickerInput" type="hidden" name="sticker" />
+                <input id="stickerInput" type="hidden" name="sticker" /> <br>
                 <button type="submit">Save</button>
             </form>
         </div>
+    </div>
+    <div class="container">
+        <!-- <div class="row">
+            <div class="col-md-auto">
+                <img src="gallery/photo_default_3980.jpeg">
+            </div>
+            <div class="col-md-auto">
+                <img src="gallery/photo_default1_2415.jpeg">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-auto">
+                <img src="gallery/photo_default_3980.jpeg">
+            </div>
+            <div class="col-md-auto">
+                <img src="gallery/photo_default1_2415.jpeg">
+            </div> -->
+    </div>
+    <?php
+    $i = 0;
+    $userPosts = getUserPosts($pdo, $_SESSION["member_id"]);
+    echo "<div class=\"row\">";
+    foreach ($userPosts as $post) {
+        if ($i !== 0 && $i % 2 == 0) {
+            echo "</div>";
+            echo "<div class=\"row\">";
+        }
+        echo "<div class=\"col-md-6\">";
+        echo "<img src=\"gallery/{$post["image"]}\">";
+        echo "</div>";
+        $i++;
+    }
+    ?>
+    <!-- gallery should be here -->
     </div>
     <canvas id="canvas" style="display: none"></canvas>
     <script type="text/javascript" src="/js/utils.js"></script>

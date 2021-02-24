@@ -18,11 +18,12 @@ function    getPosts($offset, $nposts)
     return $data;
 }
 
+// Get post data from table by gallery_id
 function    getPostById($gallery_id)
 {
     global $pdo;
 
-    $sql_query = "SELECT username, gallery.* FROM gallery INNER JOIN members 
+    $sql_query = "SELECT username, email, gallery.* FROM gallery INNER JOIN members 
 			ON gallery.member_id=members.member_id WHERE gallery_id = :id";
     $stmt = $pdo->prepare($sql_query);
     $stmt->execute(array(":id" => $gallery_id));
@@ -32,6 +33,8 @@ function    getPostById($gallery_id)
         $data = NULL;
     return $data;
 }
+
+// Render a single post card
 function    renderPost($gallery_id, $username, $img, $likes, $delete)
 {
     global $pdo;
@@ -57,7 +60,7 @@ function    renderPost($gallery_id, $username, $img, $likes, $delete)
     return $container . "\n" . $card_header . "\n" . $user . "\n" . $delete_icon . "</div>\n" . $img . "\n" . $icon . "\n" . $comment_link . "</div>";
 }
 
-
+// Get post comments
 function    getComments($gallery_id)
 {
     global $pdo;
@@ -73,6 +76,7 @@ function    getComments($gallery_id)
     return $data;
 }
 
+// render a single comment card
 function    renderComment($comment, $username)
 {
     return "<div style=\"margin-top: 40px\" class=\"card\">
@@ -81,6 +85,7 @@ function    renderComment($comment, $username)
         "</div></div>";
 }
 
+// return all posts in gallery table
 function    countPosts()
 {
     global $pdo;
@@ -93,7 +98,8 @@ function    countPosts()
     return $data[0][0];
 }
 
-function    getUserDate($member_id)
+// Get user data by member id
+function    getUserData($member_id)
 {
     global $pdo;
 
@@ -102,13 +108,14 @@ function    getUserDate($member_id)
     $stmt->execute(array(
         ":id" => $member_id
     ));
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $data = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
     if (empty($data))
         return NULL;
     return $data;
 }
 
+// Get user data by email
 function    getUserByEmail($email)
 {
     global $pdo;
@@ -117,6 +124,19 @@ function    getUserByEmail($email)
     $stmt = $pdo->prepare($sql_query);
     $stmt->execute(array(
         ":email" => $email
+    ));
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $data;
+}
+
+// Get member (member_id) posts
+function    getUserPosts($pdo, $member_id)
+{
+    $sql_query = "SELECT * FROM gallery WHERE member_id=:mb_id";
+    $stmt = $pdo->prepare($sql_query);
+    $stmt->execute(array(
+        ":mb_id" => $member_id
     ));
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();

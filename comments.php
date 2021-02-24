@@ -49,7 +49,6 @@ if (!isset($_GET["gallery_id"]))
         <div style="margin-top: 30px" id="addComment">
             <form action="insertcomment.php" method="POST">
                 <input type="hidden" name="gallery_id" value="<?= $post['gallery_id'] ?>">
-                <input type="hidden" name="member_id" value="<?= $_SESSION['member_id'] ?>">
                 <label for="comment">Added a comment</label> <br>
                 <textarea id="comment" name="comment" rows="2" cols="50"> </textarea> <br>
                 <button>Post Comment</button>

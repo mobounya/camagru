@@ -41,17 +41,24 @@ function    InsertGallery($member_id, $photoName)
 if (($stickerPath = verifySticker($_POST['sticker'])) === FALSE)
     die("Invalid Sticker");
 
+$stickerSize = getimagesize($stickerPath);
+
 // Create jpeg img resource for user_photo.
 $img = imagecreatefromjpeg($_POST["img"]);
+
+$imagewidth = imagesx($img);
+$imageHeight = imagesy($img);
+
+if ($stickerSize[0] > $imagewidth || $stickerSize[1] > $imageHeight)
+    die("Invalid image size");
 
 // Create png img resource for sticker.
 $sticker = imagecreatefrompng($stickerPath);
 
 // Get Sticker size.
-$size = getimagesize($stickerPath);
 
-// Plce sticker in img.
-imagecopy($img, $sticker, 280, 50, 0, 0, $size[0], $size[1]);
+// Place sticker in img.
+imagecopy($img, $sticker, ($imagewidth - $stickerSize[0]) / 2, ($imageHeight - $stickerSize[1]) / 2, 0, 0, $stickerSize[0], $stickerSize[1]);
 
 $photoName = generateImgFile($_SESSION['username'], $img);
 InsertGallery($_SESSION["member_id"], $photoName);

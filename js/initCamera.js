@@ -7,29 +7,11 @@
   var height;
   var width;
 
-  function addImgForm(data) {
-    // Get the form that will append our inputs into.
-    form = document.getElementById("imgForm");
-    input = document.createElement("INPUT");
-    saveBtn = document.createElement("button");
-
-    // Fill INPUT with our img data.
-    input.setAttribute("type", "hidden");
-    input.setAttribute("name", "img");
-    input.setAttribute("value", data);
-
-    // Our save button (remove button).
-    saveBtn.setAttribute("type", "submit");
-    saveBtn.innerHTML = "Save";
-
-    form.appendChild(input);
-    form.appendChild(saveBtn);
-  }
   /**
    * Take a picture, draw it in canvas and convert it
    * to data URI (PNG) to show on the HTML page.
    */
-  function takepicture(vid) {
+  function takepicture(vid, width, height) {
     console.log("taking picture...");
     canvas.width = width;
     canvas.height = height;
@@ -41,6 +23,52 @@
     // Set img data as input in form.
     var imgInput = document.getElementById("imgInput");
     imgInput.setAttribute("value", data);
+  }
+
+  function placepicture(img, width, height) {
+    console.log("placing picture...");
+    console.log(img);
+
+    canvas.width = width;
+    canvas.height = height;
+    context.drawImage(img, 0, 0, width, height);
+    var data = canvas.toDataURL("image/jpeg");
+    photo.setAttribute("src", data);
+
+    // Set img data as input in form.
+    var imgInput = document.getElementById("imgInput");
+    imgInput.setAttribute("value", data);
+  }
+
+  function addFileForm() {
+    var fileInput = document.createElement("input");
+    var videoDiv = document.getElementById("live-video");
+
+    fileInput.setAttribute("type", "file");
+    fileInput.setAttribute("id", "fileInput");
+    fileInput.setAttribute("name", "fileInput");
+
+    videoDiv.prepend(fileInput);
+    return fileInput;
+  }
+
+  function StickerListener() {
+    var stickers = document.querySelectorAll("[data-role=sticker]");
+
+    stickers.forEach(function addListener(img) {
+      img.addEventListener("click", function imageClick() {
+        console.log("aaa");
+        live_video = document.getElementById("live-video");
+
+        removeStickers(live_video);
+
+        var stickerInput = document.getElementById("stickerInput");
+        stickerInput.setAttribute("value", img.getAttribute("data-name"));
+
+        var btnCapture = document.getElementById("btn_captures");
+        btnCapture.disabled = false;
+      });
+    });
   }
 
   if (hasGetUserMedia() == true) {
@@ -56,25 +84,36 @@
     btnCapture.addEventListener(
       "click",
       function (ev) {
-        takepicture(video);
-        ev.preventDefault();
+        takepicture(video, width, height);
+      },
+      false,
+    );
+  } else {
+    var stickersDiv = document.getElementById("Disposable-imgs");
+    var fileInput = addFileForm();
+
+    btnCapture.innerHTML = "Upload image";
+    video.remove();
+
+    StickerListener();
+
+    btnCapture.addEventListener(
+      "click",
+      function (ev) {
+        if (fileInput.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var img = new Image();
+            img.onload = function () {
+              placepicture(img, img.width, img.height);
+            };
+            // load image
+            img.setAttribute("src", e.target.result);
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        }
       },
       false,
     );
   }
 })();
-
-// video.addEventListener('loadedmetadata', function () {
-//     canvas.width = video.videoWidth;
-//     canvas.height = video.videoHeight;
-// });
-
-// video.addEventListener('play', function () {
-//     var $this = this; //cache
-//     (function loop() {
-//         if (!$this.paused && !$this.ended) {
-//             context.drawImage($this, 0, 0);
-//             setTimeout(loop, 1000 / 30); // drawing at 30fps
-//         }
-//     })();
-// });

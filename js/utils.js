@@ -4,14 +4,14 @@ function hasGetUserMedia() {
   else return false;
 }
 
-// Create a new sticker.
+// Create a new sticker
 function createSticker(src) {
   var sticker = document.createElement("img");
 
   sticker.src = src;
   sticker.style.position = "absolute";
-  sticker.style.top = "0px";
-  sticker.style.left = "280px";
+  sticker.style.top = "45px";
+  sticker.style.left = "185px";
   // sticker.style.transform = "translate(-50%)";
 
   return sticker;
