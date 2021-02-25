@@ -1,7 +1,8 @@
 <?php
-session_start();
-require_once("./config/setup.php");
-require_once("./getPosts.php");
+require_once(__DIR__ . "/../config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/getPosts.php");
+
 function    InsertComment($pdo, $gallery_id, $member_id, $comment)
 {
     $sql_query = "INSERT INTO `comments` (gallery_id, member_id, comment) VALUES (:gr_id, :mb_id, :cmnt)";
@@ -21,12 +22,11 @@ function    commentAlert($opEmail, $author, $gallery_id)
     mail($opEmail, $subject, $message);
 }
 
-
-if (!isset($_SESSION["account"])) {
-    header("Location: index.php");
-    return;
-}
 if (isset($_POST["gallery_id"]) && isset($_POST["comment"])) {
+    if (!isset($_SESSION["account"])) {
+        header("Location: " . PUBLIC_ROOT . "index.php");
+        return;
+    }
     $postData = getPostById($_POST["gallery_id"]);
     if ($postData == NULL)
         die("no such gallery");
@@ -40,8 +40,5 @@ if (isset($_POST["gallery_id"]) && isset($_POST["comment"])) {
 
     if ($notifications == true)
         commentAlert($opEmail, $authorUsername, $_POST["gallery_id"]);
-    header("Location: comments.php?gallery_id=" . $_POST["gallery_id"]);
-} else {
-    header("Location: index.php");
-    return;
+    header("Location: " . PUBLIC_ROOT . "comments.php?gallery_id=" . $_POST["gallery_id"]);
 }

@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once("config/setup.php");
-require_once("utils.php");
+require_once("config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/utils.php");
 
 function    likePost($pdo, $gallery_id, $member_id)
 {
@@ -32,7 +33,7 @@ function    unlikePost($pdo, $gallery_id, $member_id)
 }
 
 if (!isset($_SESSION["member_id"])) {
-    die("Si flan");
+    die("Permission denied");
 }
 
 if (isset($_POST["gallery_id"]) && isset($_POST["action"])) {
@@ -49,4 +50,6 @@ if (isset($_POST["gallery_id"]) && isset($_POST["action"])) {
         $likes = getLikes($pdo, $_POST["gallery_id"]);
         echo $likes;
     }
+} else {
+    header("Location: index.php");
 }

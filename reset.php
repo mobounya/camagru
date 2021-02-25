@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once("./utils.php");
-require_once("./config/setup.php");
-require_once("./verifyUserData.php");
+require_once("config/constants.php");
+require_once(SCRIPTS_PATH . "/utils.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/verifyUserData.php");
 
 // check if user already asked for a reset email.
 function    checkReset($pdo, $email)
@@ -31,13 +32,13 @@ function    updateResetToken($pdo, $email, $token)
 }
 
 if (isset($_SESSION["account"])) {
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
     return;
 }
 if (isset($_POST["email"])) {
     if (verifyEmail($_POST["email"]) === false) {
         $_SESSION["error"] = "Please enter a valid E-mail address";
-        header("location: reset.php");
+        header("Location: " . PUBLIC_ROOT . "reset.php");
         return;
     }
     if (CheckEmail($pdo, $_POST["email"]) !== false) {
@@ -49,7 +50,7 @@ if (isset($_POST["email"])) {
         SendResetEmail($_POST["email"], $token);
     }
     $_SESSION["alert"] = "Reset email is sent if E-mail provided exists, check your email to reset your password";
-    header("Location: login.php");
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 }
 ?>

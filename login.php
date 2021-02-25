@@ -1,33 +1,34 @@
 <?php
 session_start();
-require_once("./verifyUserData.php");
-require_once("./config/setup.php");
-require_once("./utils.php");
+require_once("config/constants.php");
+require_once(SCRIPTS_PATH . "/verifyUserData.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/utils.php");
 
 if (isset($_SESSION["account"])) {
-    header("Location: app.php");
+    header("Location: " . PUBLIC_ROOT . "app.php");
     return;
 } else if (isset($_POST["email"]) && isset($_POST["pass"])) {
     if (verifyEmail($_POST["email"]) == false || verifyPassword($_POST["pass"]) == false) {
-        header("Location: login.php");
+        header("Location: " . PUBLIC_ROOT . "login.php");
         return;
     }
     $row = CheckLoginEntries($pdo, $_POST["email"], $_POST["pass"]);
     if ($row === FALSE) {
         $_SESSION["error"] = "Please check your entries and try again.";
-        header("Location: login.php");
+        header("Location: " . PUBLIC_ROOT . "login.php");
         return;
     } else {
         if ($row["verified"] == false) {
             $_SESSION["verification"] = "Please confirm your email to log-in";
-            header("Location: login.php");
+            header("Location: " . PUBLIC_ROOT . "login.php");
             return;
         }
         $_SESSION["account"] = $row["email"];
         $_SESSION["username"] = $row["username"];
         $_SESSION["member_id"] = $row["member_id"];
         $_SESSION["success"] = "Logged in successfully";
-        header("Location: index.php");
+        header("Location: " . PUBLIC_ROOT . "index.php");
         return;
     }
 }

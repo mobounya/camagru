@@ -1,13 +1,17 @@
 <?php
 session_start();
-require_once("./config/setup.php");
-require_once("./getPosts.php");
-require_once("./utils.php");
+require_once("config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/getPosts.php");
+require_once(SCRIPTS_PATH . "/utils.php");
 
-if (isset($_SESSION['member_id']))
-    $logged = "logout";
-else
-    $logged = "login";
+if (isset($_SESSION['member_id'])) {
+    $pageName = "logout";
+    $path = "/logout.php";
+} else {
+    $pageName = "login";
+    $path = "./login.php";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +33,7 @@ else
                 <a class="nav-link" href="app.php">App</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="<?= $logged ?>.php"><?= $logged ?></a>
+                <a class="nav-link" href="<?= $path ?>"><?= $pageName ?></a>
             </li>
         </ul>
     </div>

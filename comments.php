@@ -1,9 +1,14 @@
 <?php
 session_start();
-require_once("./config/setup.php");
-require_once("getPosts.php");
+require_once("config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/getPosts.php");
+
+
+require_once(SCRIPTS_PATH . "/insertcomment.php");
+
 if (!isset($_GET["gallery_id"]))
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +26,7 @@ if (!isset($_GET["gallery_id"]))
     $post = getPostById($_GET["gallery_id"]);
     if ($post == NULL) {
         $_SESSION["error"] = "Post dosen't exist";
-        header("Location: index.php");
+        header("Location: " . PUBLIC_ROOT . "index.php");
         return;
     }
     if (isset($_SESSION['member_id']) && ($post["member_id"] === $_SESSION['member_id']))
@@ -47,7 +52,7 @@ if (!isset($_GET["gallery_id"]))
     if (isset($_SESSION['member_id'])) :
     ?>
         <div style="margin-top: 30px" id="addComment">
-            <form action="insertcomment.php" method="POST">
+            <form method="POST">
                 <input type="hidden" name="gallery_id" value="<?= $post['gallery_id'] ?>">
                 <label for="comment">Added a comment</label> <br>
                 <textarea id="comment" name="comment" rows="2" cols="50"> </textarea> <br>

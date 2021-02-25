@@ -1,6 +1,7 @@
 <?php
-require_once("./config/setup.php");
-require_once("./utils.php");
+require_once(__DIR__ . "/../config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/utils.php");
 
 function    getPosts($offset, $nposts)
 {

@@ -1,8 +1,9 @@
 <?php
 session_start();
-require_once("config/setup.php");
-require_once("getPosts.php");
-require_once("utils.php");
+require_once("config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/getPosts.php");
+require_once(SCRIPTS_PATH . "/utils.php");
 
 // Check if token exist in reset table
 function    checkResetToken($pdo, $email, $token)
@@ -41,14 +42,14 @@ if (isset($_POST["newpass"]) && isset($_POST["email"]) && isset($_POST["token"])
     $userData = getUserByEmail($_POST["email"]);
     updatePassword($pdo, $userData[0]["member_id"], $_POST["newpass"]);
     $_SESSION["success"] = "Password changed successfully, please log-in";
-    header("Location: login.php");
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 } else if (isset($_GET["email"]) && isset($_GET["token"])) {
     if (checkResetToken($pdo, $_GET["email"], $_GET["token"]) === false) {
         die("invalid token");
     }
 } else {
-    header("location: login.php");
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 }
 

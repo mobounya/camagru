@@ -1,13 +1,17 @@
 <?php
 session_start();
-require_once("./utils.php");
-require_once("./config/setup.php");
-require_once("./getPosts.php");
+require_once("config/constants.php");
+require_once(SCRIPTS_PATH . "/utils.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/getPosts.php");
+
 if (!isset($_SESSION['account'])) {
     $_SESSION["error"] = "Please Log-in";
-    header("Location: login.php");
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 }
+
+require_once(SCRIPTS_PATH . "/renderImg.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +34,7 @@ if (!isset($_SESSION['account'])) {
                 <a class="nav-link active" href="app.php">App</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Logout</a>
+                <a class="nav-link" href="./scripts/logout.php">Logout</a>
             </li>
         </ul>
     </div>
@@ -59,29 +63,12 @@ if (!isset($_SESSION['account'])) {
         </div>
         <div id="output">
             <img id="photo" />
-            <form action="/renderImg.php" method="POST" id="myForm">
+            <form action="scripts/renderImg.php" method="POST" id="myForm">
                 <input id="imgInput" type="hidden" name="img" />
                 <input id="stickerInput" type="hidden" name="sticker" /> <br>
                 <button type="submit">Save</button>
             </form>
         </div>
-    </div>
-    <div class="container">
-        <!-- <div class="row">
-            <div class="col-md-auto">
-                <img src="gallery/photo_default_3980.jpeg">
-            </div>
-            <div class="col-md-auto">
-                <img src="gallery/photo_default1_2415.jpeg">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-auto">
-                <img src="gallery/photo_default_3980.jpeg">
-            </div>
-            <div class="col-md-auto">
-                <img src="gallery/photo_default1_2415.jpeg">
-            </div> -->
     </div>
     <?php
     $i = 0;

@@ -1,8 +1,9 @@
 <?php
-session_start();
-require_once("./config/setup.php");
+require_once(__DIR__ . "/../config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+
 if (!isset($_SESSION["account"])) {
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
     return;
 }
 // Verify if sticker img exist, return its path if it does.
@@ -38,28 +39,30 @@ function    InsertGallery($member_id, $photoName)
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':mb_id' => $member_id, ':img' => $photoName));
 }
-if (($stickerPath = verifySticker($_POST['sticker'])) === FALSE)
-    die("Invalid Sticker");
+if (isset($_POST["img"]) && isset($_POST["sticker"])) {
+    if (($stickerPath = verifySticker($_POST['sticker'])) === FALSE)
+        die("Invalid Sticker");
 
-$stickerSize = getimagesize($stickerPath);
+    $stickerSize = getimagesize($stickerPath);
 
-// Create jpeg img resource for user_photo.
-$img = imagecreatefromjpeg($_POST["img"]);
+    // Create jpeg img resource for user_photo.
+    $img = imagecreatefromjpeg($_POST["img"]);
 
-$imagewidth = imagesx($img);
-$imageHeight = imagesy($img);
+    $imagewidth = imagesx($img);
+    $imageHeight = imagesy($img);
 
-if ($stickerSize[0] > $imagewidth || $stickerSize[1] > $imageHeight)
-    die("Invalid image size");
+    if ($stickerSize[0] > $imagewidth || $stickerSize[1] > $imageHeight)
+        die("Invalid image size");
 
-// Create png img resource for sticker.
-$sticker = imagecreatefrompng($stickerPath);
+    // Create png img resource for sticker.
+    $sticker = imagecreatefrompng($stickerPath);
 
-// Get Sticker size.
+    // Get Sticker size.
 
-// Place sticker in img.
-imagecopy($img, $sticker, ($imagewidth - $stickerSize[0]) / 2, ($imageHeight - $stickerSize[1]) / 2, 0, 0, $stickerSize[0], $stickerSize[1]);
+    // Place sticker in img.
+    imagecopy($img, $sticker, ($imagewidth - $stickerSize[0]) / 2, ($imageHeight - $stickerSize[1]) / 2, 0, 0, $stickerSize[0], $stickerSize[1]);
 
-$photoName = generateImgFile($_SESSION['username'], $img);
-InsertGallery($_SESSION["member_id"], $photoName);
-header("Location: index.php");
+    $photoName = generateImgFile($_SESSION['username'], $img);
+    InsertGallery($_SESSION["member_id"], $photoName);
+    header("Location: " . PUBLIC_ROOT . "index.php");
+}

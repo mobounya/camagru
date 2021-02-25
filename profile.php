@@ -1,13 +1,14 @@
 <?php
 session_start();
-require_once("./getPosts.php");
-require_once("./utils.php");
-require_once("./verifyUserData.php");
-require_once("./config/setup.php");
+require_once("config/constants.php");
+require_once(SCRIPTS_PATH . "/getPosts.php");
+require_once(SCRIPTS_PATH . "/utils.php");
+require_once(SCRIPTS_PATH . "/verifyUserData.php");
+require_once(CONFIG_PATH . "/setup.php");
 
 if (!isset($_SESSION["member_id"])) {
     $_SESSION["error"] = "Please log-in";
-    header("Location: login.php");
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 }
 
@@ -28,18 +29,18 @@ if (isset($_POST["email"]) || isset($_POST["oldpassword"]) || isset($_POST["user
 
     if (!isset($_POST["oldpassword"]) || empty($_POST["oldpassword"])) {
         $_SESSION["error"] = "Please provide your old password to save changes.";
-        header("Location: profile.php");
+        header("Location: " . PUBLIC_ROOT . "profile.php");
         return;
     } else if (CheckLoginEntries($pdo, $_POST["email"], $_POST["oldpassword"]) == false) {
         $_SESSION["error"] = "Wrong Password, please try again!";
-        header("Location: profile.php");
+        header("Location: " . PUBLIC_ROOT . "profile.php");
         return;
     }
 
     if (isset($_POST["email"]) && !empty($_POST["email"])) {
         if (verifyEmail($_POST["email"]) === false) {
             $_SESSION["error"] = "Please enter a valid E-mail address";
-            header("Location: profile.php");
+            header("Location: " . PUBLIC_ROOT . "profile.php");
             return;
         }
         $fields["email"] = $_POST["email"];
@@ -67,7 +68,7 @@ if (isset($_POST["email"]) || isset($_POST["oldpassword"]) || isset($_POST["user
     $stmt->execute();
     $stmt->closeCursor();
     $_SESSION["success"] = "Data changed successfully";
-    header("Location: profile.php");
+    header("Location: " . PUBLIC_ROOT . "profile.php");
     return;
 }
 $profile = getUserData($_SESSION["member_id"]);

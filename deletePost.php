@@ -1,11 +1,12 @@
 <?php
 session_start();
-require_once("./utils.php");
-require_once("./config/setup.php");
+require_once("config/constants.php");
+require_once(SCRIPTS_PATH . "/utils.php");
+require_once(CONFIG_PATH . "/setup.php");
 
 if (!isset($_SESSION["account"])) {
     $_SESSION["error"] = "Please log-in";
-    header("Location: login.php");
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 }
 if (isset($_POST["gallery_id"])) {
@@ -15,17 +16,17 @@ if (isset($_POST["gallery_id"])) {
         $_SESSION["success"] = "Post n#" . $_POST["gallery_id"] . " has been deleted successfully";
     } else
         $_SESSION["error"] = "You don't have permission to delete this post.";
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
     return;
 }
 if (!isset($_GET["gallery_id"])) {
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
     return;
 }
 $postOwner = getPostOwner($pdo, $_GET["gallery_id"]);
 if ($postOwner["member_id"] !== $_SESSION["member_id"]) {
     $_SESSION["error"] = "You don't have permission to delete this post.";
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
     return;
 }
 ?>

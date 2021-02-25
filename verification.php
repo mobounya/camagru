@@ -1,5 +1,6 @@
 <?php
-require_once("./config/setup.php");
+require_once("config/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
 
 function    send_Veremail($email, $username, $token)
 {
@@ -20,10 +21,10 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
 		$query = "DELETE FROM email_tokens WHERE email = :email AND token = :token";
 		$stmt = $pdo->prepare($query);
 		$stmt->execute(array(':email' => $_GET['email'], ':token' => $_GET['token']));
-		header("Location: app.php");
+		header("Location: " . PUBLIC_ROOT . "app.php");
 		return;
 	} else {
-		header("Location: index.php");
+		header("Location: " . PUBLIC_ROOT . "index.php");
 		return;
 	}
 }

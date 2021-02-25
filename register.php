@@ -1,9 +1,11 @@
 <?php
 session_start();
-require_once("./config/setup.php");
-require_once("verifyUserData.php");
-require_once("verification.php");
-require_once("./utils.php");
+require_once("config/constants.php");
+require_once(CONFIG_PATH . "/constants.php");
+require_once(CONFIG_PATH . "/setup.php");
+require_once(SCRIPTS_PATH . "/verifyUserData.php");
+require_once(APP_ROOT . "/verification.php");
+require_once(SCRIPTS_PATH . "/utils.php");
 
 function    insert_user($username, $email, $password)
 {
@@ -27,29 +29,29 @@ function    insertToken($email, $token)
 }
 
 if (isset($_SESSION["account"])) {
-    header("Location: app.php");
+    header("Location: " . PUBLIC_ROOT . "app.php");
     return;
 }
 if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"])) {
     if (verifyEmail($_POST["email"]) == false) {
         $_SESSION["error"] = "Please enter a valid e-mail address";
-        header("Location: register.php");
+        header("Location: " . PUBLIC_ROOT . "register.php");
         return;
     }
     if (verifyUsername($_POST["username"]) == false) {
-        header("Location: register.php");
+        header("Location: " . PUBLIC_ROOT . "register.php");
         return;
     }
     if (verifyPassword($_POST["pass"]) == false) {
         $_SESSION["error"] = "Invalid password.";
-        header("Location: register.php");
+        header("Location: " . PUBLIC_ROOT . "register.php");
         return;
     }
     $token = generate_randtoken();
     insertToken($_POST["email"], $token);
     insert_user($_POST["username"], $_POST["email"], $_POST["pass"]);
     send_Veremail($_POST["email"], $_POST["username"], $token);
-    header("Location: index.php");
+    header("Location: " . PUBLIC_ROOT . "index.php");
     return;
 }
 ?>
