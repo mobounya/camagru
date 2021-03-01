@@ -10,5 +10,7 @@ services:
     volumes:
       - ./:/app
       - database:/var/lib/mysql
+    environment:
+      MYSQL_ADMIN_PASS: toor
 volumes:
   database:

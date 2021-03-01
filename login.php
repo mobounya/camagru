@@ -9,7 +9,7 @@ if (isset($_SESSION["account"])) {
     header("Location: " . PUBLIC_ROOT . "app.php");
     return;
 } else if (isset($_POST["email"]) && isset($_POST["pass"])) {
-    if (verifyEmail($_POST["email"]) == false || verifyPassword($_POST["pass"]) == false) {
+    if (verifyEmail($_POST["email"]) == false) {
         header("Location: " . PUBLIC_ROOT . "login.php");
         return;
     }

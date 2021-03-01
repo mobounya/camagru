@@ -1,14 +1,14 @@
 <?php
+session_start();
 require_once("config/constants.php");
 require_once(CONFIG_PATH . "/setup.php");
 
-function    send_Veremail($email, $username, $token)
+function	setVerified($pdo, $email)
 {
-	$subject = "Please verify your email";
-	$message = "Hi $username\n
-		Please verify your e-mail using this link:\n
-		http://{$_SERVER["SERVER_NAME"]}:8080/verification.php?email=$email&token=$token";
-	mail($email, $subject, $message);
+	$sql_query = "UPDATE members SET verified=1 WHERE email = :email";
+	$stmt = $pdo->prepare($sql_query);
+	$stmt->execute(array(":email" => $email));
+	$stmt->closeCursor();
 }
 
 if (isset($_GET['email']) && isset($_GET['token'])) {
@@ -17,14 +17,14 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
 	$stmt->execute(array(':email' => $_GET['email'], ':token' => $_GET['token']));
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	if ($row == TRUE) {
-		$_SESSION["verification"] = "E-mail ({$_GET['email']}) confirmed";
+		$_SESSION["verification"] = "Email confirmed, please log-in";
 		$query = "DELETE FROM email_tokens WHERE email = :email AND token = :token";
 		$stmt = $pdo->prepare($query);
 		$stmt->execute(array(':email' => $_GET['email'], ':token' => $_GET['token']));
-		header("Location: " . PUBLIC_ROOT . "app.php");
+		setVerified($pdo, $_GET['email']);
+		header("Location: " . PUBLIC_ROOT . "login.php");
 		return;
 	} else {
-		header("Location: " . PUBLIC_ROOT . "index.php");
-		return;
+		die("Invalid token");
 	}
 }

@@ -4,7 +4,6 @@ require_once("config/constants.php");
 require_once(CONFIG_PATH . "/constants.php");
 require_once(CONFIG_PATH . "/setup.php");
 require_once(SCRIPTS_PATH . "/verifyUserData.php");
-require_once(APP_ROOT . "/verification.php");
 require_once(SCRIPTS_PATH . "/utils.php");
 
 function    insert_user($username, $email, $password)
@@ -17,6 +16,16 @@ function    insert_user($username, $email, $password)
     $stmt->execute(array(':username' => $username, ':email' => $email, ':pass' => $hashed_pass));
     return;
 }
+
+function    send_Veremail($email, $username, $token)
+{
+    $subject = "Please verify your email";
+    $message = "Hi $username\n
+		Please verify your e-mail using this link:\n
+		http://{$_SERVER["SERVER_NAME"]}:8080/verification.php?email=$email&token=$token";
+    mail($email, $subject, $message);
+}
+
 
 function    insertToken($email, $token)
 {
@@ -43,7 +52,16 @@ if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"])
         return;
     }
     if (verifyPassword($_POST["pass"]) == false) {
-        $_SESSION["error"] = "Invalid password.";
+        header("Location: " . PUBLIC_ROOT . "register.php");
+        return;
+    }
+    if (CheckEmail($pdo, $_POST["email"])) {
+        $_SESSION["error"] = "E-mail is already used, please choose another E-mail";
+        header("Location: " . PUBLIC_ROOT . "register.php");
+        return;
+    }
+    if (getByusername($pdo, $_POST["username"])) {
+        $_SESSION["error"] = "Username is already used, please choose another Username";
         header("Location: " . PUBLIC_ROOT . "register.php");
         return;
     }
@@ -51,7 +69,8 @@ if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"])
     insertToken($_POST["email"], $token);
     insert_user($_POST["username"], $_POST["email"], $_POST["pass"]);
     send_Veremail($_POST["email"], $_POST["username"], $token);
-    header("Location: " . PUBLIC_ROOT . "index.php");
+    $_SESSION["alert"] = "Verification email sent, please confirm your E-mail";
+    header("Location: " . PUBLIC_ROOT . "login.php");
     return;
 }
 ?>
@@ -67,6 +86,19 @@ if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"])
 </head>
 
 <body>
+    <div class="app-navbar">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="index.php">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="app.php">App</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+            </li>
+        </ul>
+    </div>
     <div style="display: inline-block; margin-top: 50px; margin-left: 30px">
         <h2>Create an account</h2>
         <?php

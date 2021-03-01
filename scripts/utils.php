@@ -92,9 +92,9 @@ function    flashMessage()
             </div>";
         unset($_SESSION["error"]);
     } else if (isset($_SESSION["verification"])) {
-        echo "<p style=\"color: red\">";
+        echo "<div class=\"alert alert-primary\" role=\"alert\">";
         echo $_SESSION["verification"];
-        echo "</p>";
+        echo "</div>";
         unset($_SESSION["verification"]);
     } else if (isset($_SESSION["alert"])) {
         echo "<div class=\"alert alert-primary\" role=\"alert\">";
@@ -117,9 +117,12 @@ function    CheckLoginEntries($pdo, $email, $pass)
     ));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
-    if (password_verify($pass, $row["password"]) == true)
-        return $row;
-    else
+    if ($row) {
+        if (password_verify($pass, $row["password"]) == true)
+            return $row;
+        else
+            return false;
+    } else
         return false;
 }
 
@@ -223,7 +226,7 @@ function    isLiked($pdo, $member_id, $gallery_id)
         return true;
 }
 
-function array_foreach($callback, $array)
+function    array_foreach($callback, $array)
 {
     foreach ($array as $key => $value) {
         $callback($key, $value);

@@ -20,9 +20,28 @@ function    verifyUsername($username)
 
 function    verifyPassword($password)
 {
-    // regex
-    if ($password === "") {
-        $_SESSION["error"] = "Please enter your password";
+    $requirements = "Password should be at least 8 characters, at least 2 special character, 2 uppercase, 2 digits";
+    if (strlen($password) < 8) {
+        $_SESSION["error"] = "Password should be at least 8 characters";
+        return false;
+    }
+
+    $pattern = '/[^a-zA-Z0-9]/';
+    $matches = preg_match_all($pattern, $password);
+    if ($matches < 1) {
+        $_SESSION["error"] = $requirements;
+        return false;
+    }
+    $pattern = '/[0-9]/';
+    $matches = preg_match_all($pattern, $password);
+    if ($matches < 1) {
+        $_SESSION["error"] = $requirements;
+        return false;
+    }
+    $pattern = '/[A-Z]/';
+    $matches = preg_match_all($pattern, $password);
+    if ($matches < 1) {
+        $_SESSION["error"] = $requirements;
         return false;
     }
     return true;

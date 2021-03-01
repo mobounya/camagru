@@ -88,6 +88,24 @@ else
 </head>
 
 <body>
+
+    <div class="ft_navbar">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="app.php">App</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="profile.php">Profile</a>
+            </li>
+        </ul>
+    </div>
+
     <main class="container pt-2">
         <div id="avatar" style="display: flex; justify-content: center;">
             <img src="assets/avatar.jpg" alt="Avatar" style="margin: auto; border-radius: 50%;">

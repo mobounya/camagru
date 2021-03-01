@@ -46,9 +46,14 @@ function    renderPost($gallery_id, $username, $img, $likes, $delete)
         $delete_icon = "";
     $class = "bi bi-suit-heart";
     $function = "like($gallery_id)";
-    if (isLiked($pdo,  $_SESSION["member_id"], $gallery_id)) {
-        $class = "bi bi-heart-fill";
-        $function = "unlike($gallery_id)";
+    if (isset($_SESSION["member_id"])) {
+        if (isLiked($pdo,  $_SESSION["member_id"], $gallery_id)) {
+            $class = "bi bi-heart-fill";
+            $function = "unlike($gallery_id)";
+        }
+    } else {
+        $class = "";
+        $function = "";
     }
     $container = "<div class=\"shadow-sm p-3 mb-5 bg-white rounded\">";
     $card_header = "<div style=\"display: flex; justify-content: space-between\" class=\"card-header\">";

@@ -34,8 +34,17 @@ require_once(SCRIPTS_PATH . "/renderImg.php");
                 <a class="nav-link active" href="app.php">App</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./scripts/logout.php">Logout</a>
+                <a class="nav-link" href="logout.php">Logout</a>
             </li>
+            <?php
+            if (isset($_SESSION["account"])) :
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.php">Profile</a>
+                </li>
+            <?php
+            endif;
+            ?>
         </ul>
     </div>
 
@@ -63,7 +72,7 @@ require_once(SCRIPTS_PATH . "/renderImg.php");
         </div>
         <div id="output">
             <img id="photo" />
-            <form action="scripts/renderImg.php" method="POST" id="myForm">
+            <form method="POST" id="myForm">
                 <input id="imgInput" type="hidden" name="img" />
                 <input id="stickerInput" type="hidden" name="sticker" /> <br>
                 <button type="submit">Save</button>
