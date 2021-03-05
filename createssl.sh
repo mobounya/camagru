@@ -46,5 +46,3 @@ a2enmod ssl
 a2enmod headers
 a2ensite default-ssl
 a2enconf ssl-params
-
-echo "sendmail_path = /usr/bin/env catchmail -f admin@camagru.com" >> /etc/php/7.4/apache2/php.ini 

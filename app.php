@@ -52,32 +52,27 @@ require_once(SCRIPTS_PATH . "/renderImg.php");
     flashMessage();
     ?>
 
-    <div id="camContainer" style="margin-left: 25px; margin-top: 50px">
-        <div id="Disposable-imgs" display="display: inline-block;">
-            <div class="row">
-                <div class="col-sm">
-                    <img data-role="sticker" data-name="chefhat" src="/assets/images/chefhat.png">
-                </div>
-                <div class="col-sm">
-                    <img data-role="sticker" data-name="glasses" src="/assets/images/glasses.png">
-                </div>
-                <div class="col-sm">
-                    <img data-role="sticker" data-name="grass" src="/assets/images/grass.png">
-                </div>
+    <div id="camContainer" style="margin-top: 50px;" class="px-4">
+        <div id="Disposable-imgs" class="stickers">
+            <img data-role="sticker" data-name="chefhat" src="/assets/images/chefhat.png">
+            <img data-role="sticker" data-name="glasses" src="/assets/images/glasses.png">
+            <img data-role="sticker" data-name="grass" src="/assets/images/grass.png">
+        </div>
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center; flex-wrap: wrap;">
+            <div style="position: relative; display: inline-block" id="live-video">
+                <video id="video" width="640px" style="object-fit: contain; width: 100%; max-width: 640px" autoplay></video>
             </div>
+            <button id="btn_captures" disabled class="btn btn-primary my-2">Capture Photo</button>
         </div>
-        <div style="position: relative; display: inline-block" id="live-video">
-            <video id="video" width="550px" autoplay></video> <br>
-            <button id="btn_captures" disabled>Capture Photo</button>
+
+        <div id="output" style="display: flex; justify-content: center">
+            <img id="photo" style="max-width: 100%; max-height: 480px;" />
         </div>
-        <div id="output">
-            <img id="photo" />
-            <form method="POST" id="myForm">
-                <input id="imgInput" type="hidden" name="img" />
-                <input id="stickerInput" type="hidden" name="sticker" /> <br>
-                <button type="submit">Save</button>
-            </form>
-        </div>
+        <form method="POST" id="myForm">
+            <input id="imgInput" type="hidden" name="img" />
+            <input id="stickerInput" type="hidden" name="sticker" /> <br>
+            <button type="submit" class="btn btn-primary my-2">Save</button>
+        </form>
     </div>
     <?php
     $i = 0;
@@ -94,7 +89,6 @@ require_once(SCRIPTS_PATH . "/renderImg.php");
         $i++;
     }
     ?>
-    <!-- gallery should be here -->
     </div>
     <canvas id="canvas" style="display: none"></canvas>
     <script type="text/javascript" src="/js/utils.js"></script>

@@ -1,4 +1,5 @@
 <?php
+
 // Server paths
 define("APP_ROOT", dirname(__DIR__));
 define("SCRIPTS_PATH", APP_ROOT . "/scripts");

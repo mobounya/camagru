@@ -82,32 +82,31 @@ else
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
     <title><?= $profile["username"] ?> Profile</title>
 </head>
 
 <body>
-
-    <div class="ft_navbar">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link" href="index.php">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="app.php">App</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="logout.php">Logout</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="profile.php">Profile</a>
-            </li>
-        </ul>
-    </div>
-
-    <main class="container pt-2">
-        <div id="avatar" style="display: flex; justify-content: center;">
+    <main class="container">
+        <div class="ft_navbar">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="app.php">App</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="profile.php">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+            </ul>
+        </div>
+        <div id="avatar" style="display: flex; justify-content: center; margin-top: 16px;">
             <img src="assets/avatar.jpg" alt="Avatar" style="margin: auto; border-radius: 50%;">
         </div>
         <?php

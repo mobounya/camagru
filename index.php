@@ -20,65 +20,71 @@ if (isset($_SESSION["username"]))
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./styling/app.css">
     <title> <?= $username ?> Gallery</title>
 </head>
 
 <body>
-    <div class="app-navbar">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active" href="index.php">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="app.php">App</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $path ?>"><?= $pageName ?></a>
-            </li>
-            <?php
-            if (isset($_SESSION["account"])) :
-            ?>
+    <main class="container pt-2">
+        <div class="app-navbar">
+            <ul class="nav nav-pills">
                 <li class="nav-item">
-                    <a class="nav-link" href="profile.php">Profile</a>
+                    <a class="nav-link active" href="index.php">Home</a>
                 </li>
-            <?php
-            endif;
-            ?>
-        </ul>
-    </div>
-    <div style="margin-top: 40px; display: inline-block">
+                <li class="nav-item">
+                    <a class="nav-link" href="app.php">App</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $path ?>"><?= $pageName ?></a>
+                </li>
+                <?php
+                if (isset($_SESSION["account"])) :
+                ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">Profile</a>
+                    </li>
+                <?php
+                endif;
+                ?>
+            </ul>
+        </div>
         <?php
         flashMessage();
-        $galleryPath = "gallery/";
-        if (isset($_GET["page"])) {
-            if ($_GET["page"] <= 0)
-                $current_page = 1;
-            else
-                $current_page = $_GET["page"];
-        } else
-            $current_page = 1;
-        $posts = getPosts(5 * ($current_page - 1), 5);
-        if ($posts == NULL) :
         ?>
-            <h3 style="margin-left: 25px;">
-                WOW !
-                <small class="text-muted">such empty</small>
-            </h3>
-            <img src="assets/giphy.gif">
-        <?php
-        else :
-            foreach ($posts as $post) {
-                if (isset($_SESSION['member_id']) && ($post["member_id"] === $_SESSION['member_id']))
-                    $delete = TRUE;
+        <div class="app-posts">
+            <?php
+            $galleryPath = "gallery/";
+            if (isset($_GET["page"])) {
+                if ($_GET["page"] <= 0)
+                    $current_page = 1;
                 else
-                    $delete = FALSE;
-                echo renderPost($post["gallery_id"], $post["username"], $galleryPath . $post["image"], $post["likes"], $delete);
-            }
-        endif;
-        ?>
+                    $current_page = $_GET["page"];
+            } else
+                $current_page = 1;
+            $posts = getPosts(5 * ($current_page - 1), 5);
+            if ($posts == NULL) :
+            ?>
+                <h3 style="margin-left: 25px;">
+                    WOW !
+                    <small class="text-muted">such empty</small>
+                </h3>
+                <img src="assets/giphy.gif">
+            <?php
+            else :
+                foreach ($posts as $post) {
+                    if (isset($_SESSION['member_id']) && ($post["member_id"] === $_SESSION['member_id']))
+                        $delete = TRUE;
+                    else
+                        $delete = FALSE;
+                    echo renderPost($post["gallery_id"], $post["username"], $galleryPath . $post["image"], $post["likes"], $delete);
+                }
+            endif;
+            ?>
+        </div>
         <div id="pagination" style="display: flex; justify-content: center;">
             <nav style="margin-top: 20px;" aria-label="Page navigation example">
                 <ul class="pagination">
@@ -109,7 +115,7 @@ if (isset($_SESSION["username"]))
                 </ul>
             </nav>
         </div>
-    </div>
+    </main>
     <script type="text/javascript" src="js/like.js"></script>
 </body>
 

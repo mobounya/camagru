@@ -11,6 +11,7 @@
 
         // Remove previous stickers.
         removeStickers(live_video);
+
         // Create new image and append to div container.
         var sticker = createSticker(img.src);
         live_video.appendChild(sticker);

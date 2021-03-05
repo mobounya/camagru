@@ -9,6 +9,13 @@ require_once(SCRIPTS_PATH . "/insertcomment.php");
 
 if (!isset($_GET["gallery_id"]))
     header("Location: " . PUBLIC_ROOT . "index.php");
+if (isset($_SESSION['member_id'])) {
+    $pageName = "logout";
+    $path = "/logout.php";
+} else {
+    $pageName = "login";
+    $path = "./login.php";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,54 +28,78 @@ if (!isset($_GET["gallery_id"]))
 </head>
 
 <body>
-    <?php
-    $gallery_path = "gallery/";
-    $post = getPostById($_GET["gallery_id"]);
-    if ($post == NULL) {
-        $_SESSION["error"] = "Post dosen't exist";
-        header("Location: " . PUBLIC_ROOT . "index.php");
-        return;
-    }
-    if (isset($_SESSION['member_id']) && ($post["member_id"] === $_SESSION['member_id']))
-        $delete = TRUE;
-    else
-        $delete = FALSE;
-    echo renderPost($post["gallery_id"], $post["username"], $gallery_path . $post["image"], $post["likes"], $delete);
-    $comments = getComments($_GET["gallery_id"]);
-    if ($comments === NULL) :
-    ?>
-        <div style="margin-top: 30px" class="alert alert-primary" role="alert">
-            No comments on this post !
+    <main class="container pt-2">
+        <div class="ft_navbar">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="app.php">App</a>
+                </li>
+                <?php
+                if (isset($_SESSION["account"])) :
+                ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">Profile</a>
+                    </li>
+                <?php
+                endif;
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $path ?>"><?= $pageName ?></a>
+                </li>
+            </ul>
         </div>
-    <?php
-    else : {
-            foreach ($comments as $comment) {
-                echo renderComment($comment['comment'], $comment['username']);
-            }
+        <?php
+        $gallery_path = "gallery/";
+        $post = getPostById($_GET["gallery_id"]);
+        if ($post == NULL) {
+            $_SESSION["error"] = "Post dosen't exist";
+            header("Location: " . PUBLIC_ROOT . "index.php");
+            return;
         }
-    endif;
-    ?>
-    <?php
-    if (isset($_SESSION['member_id'])) :
-    ?>
-        <div style="margin-top: 30px" id="addComment">
-            <form method="POST">
-                <input type="hidden" name="gallery_id" value="<?= $post['gallery_id'] ?>">
-                <label for="comment">Added a comment</label> <br>
-                <textarea id="comment" name="comment" rows="2" cols="50"> </textarea> <br>
-                <button>Post Comment</button>
-            </form>
-        </div>
-    <?php
-    else :
-    ?>
-        <div style="margin-top: 10px" class="alert alert-dark" role="alert">
-            Please <a href="login.php">Log-in</a> to post a comment
-        </div>
-    <?php
-    endif;
-    ?>
-    <script type="text/javascript" src="js/like.js"></script>
+        if (isset($_SESSION['member_id']) && ($post["member_id"] === $_SESSION['member_id']))
+            $delete = TRUE;
+        else
+            $delete = FALSE;
+        echo renderPost($post["gallery_id"], $post["username"], $gallery_path . $post["image"], $post["likes"], $delete);
+        $comments = getComments($_GET["gallery_id"]);
+        if ($comments === NULL) :
+        ?>
+            <div style="margin-top: 30px" class="alert alert-primary" role="alert">
+                No comments on this post !
+            </div>
+        <?php
+        else : {
+                foreach ($comments as $comment) {
+                    echo renderComment($comment['comment'], $comment['username']);
+                }
+            }
+        endif;
+        ?>
+        <?php
+        if (isset($_SESSION['member_id'])) :
+        ?>
+            <div style="margin-top: 30px" id="addComment">
+                <form method="POST">
+                    <input type="hidden" name="gallery_id" value="<?= $post['gallery_id'] ?>">
+                    <label for="comment">Added a comment</label> <br>
+                    <textarea id="comment" name="comment" rows="2" cols="50"> </textarea> <br>
+                    <button class="btn btn-primary my-2">Post Comment</button>
+                </form>
+            </div>
+        <?php
+        else :
+        ?>
+            <div style="margin-top: 10px" class="alert alert-dark" role="alert">
+                Please <a href="login.php">Log-in</a> to post a comment
+            </div>
+        <?php
+        endif;
+        ?>
+        <script type="text/javascript" src="js/like.js"></script>
+    </main>
 </body>
 
 </html>

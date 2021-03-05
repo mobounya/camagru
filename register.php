@@ -22,7 +22,7 @@ function    send_Veremail($email, $username, $token)
     $subject = "Please verify your email";
     $message = "Hi $username\n
 		Please verify your e-mail using this link:\n
-		http://{$_SERVER["SERVER_NAME"]}:8080/verification.php?email=$email&token=$token";
+		http://{$_SERVER["SERVER_NAME"]}/verification.php?email=$email&token=$token";
     mail($email, $subject, $message);
 }
 
@@ -86,19 +86,6 @@ if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"])
 </head>
 
 <body>
-    <div class="app-navbar">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active" href="index.php">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="app.php">App</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="login.php">Login</a>
-            </li>
-        </ul>
-    </div>
     <div style="display: inline-block; margin-top: 50px; margin-left: 30px">
         <h2>Create an account</h2>
         <?php

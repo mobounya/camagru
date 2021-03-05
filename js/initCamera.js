@@ -12,12 +12,11 @@
    * to data URI (PNG) to show on the HTML page.
    */
   function takepicture(vid, width, height) {
-    console.log("taking picture...");
     canvas.width = width;
     canvas.height = height;
 
     context.drawImage(vid, 0, 0, width, height);
-    var data = canvas.toDataURL("image/jpeg");
+    var data = canvas.toDataURL("image/png");
     photo.setAttribute("src", data);
 
     // Set img data as input in form.
@@ -26,13 +25,11 @@
   }
 
   function placepicture(img, width, height) {
-    console.log("placing picture...");
-    console.log(img);
-
     canvas.width = width;
     canvas.height = height;
+
     context.drawImage(img, 0, 0, width, height);
-    var data = canvas.toDataURL("image/jpeg");
+    var data = canvas.toDataURL("image/png");
     photo.setAttribute("src", data);
 
     // Set img data as input in form.
@@ -57,11 +54,6 @@
 
     stickers.forEach(function addListener(img) {
       img.addEventListener("click", function imageClick() {
-        console.log("aaa");
-        live_video = document.getElementById("live-video");
-
-        removeStickers(live_video);
-
         var stickerInput = document.getElementById("stickerInput");
         stickerInput.setAttribute("value", img.getAttribute("data-name"));
 
@@ -89,7 +81,6 @@
       false,
     );
   } else {
-    var stickersDiv = document.getElementById("Disposable-imgs");
     var fileInput = addFileForm();
 
     btnCapture.innerHTML = "Upload image";
@@ -99,7 +90,7 @@
 
     btnCapture.addEventListener(
       "click",
-      function (ev) {
+      function () {
         if (fileInput.files[0]) {
           var reader = new FileReader();
           reader.onload = function (e) {

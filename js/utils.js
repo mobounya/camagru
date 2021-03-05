@@ -10,9 +10,9 @@ function createSticker(src) {
 
   sticker.src = src;
   sticker.style.position = "absolute";
-  sticker.style.top = "45px";
-  sticker.style.left = "185px";
-  // sticker.style.transform = "translate(-50%)";
+  sticker.style.top = "10px";
+  sticker.style.left = "50%";
+  sticker.style.transform = "translate(-50%)";
 
   return sticker;
 }

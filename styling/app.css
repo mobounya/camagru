@@ -2,3 +2,30 @@
   margin-top: 25px;
   margin-left: 25px;
 }
+
+.app-posts {
+  border: 1px solid whitesmoke;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.app-post {
+  width: 49%;
+}
+
+.app-post-likes {
+  padding: 0px 2px 0px 2px;
+}
+
+.stickers {
+  display: flex;
+  justify-content: center;
+}
+
+.stickers img {
+  width: 80px;
+}

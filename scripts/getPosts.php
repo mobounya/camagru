@@ -55,13 +55,13 @@ function    renderPost($gallery_id, $username, $img, $likes, $delete)
         $class = "";
         $function = "";
     }
-    $container = "<div class=\"shadow-sm p-3 mb-5 bg-white rounded\">";
+    $container = "<div class=\"app-post shadow-sm p-3 mb-5 bg-white rounded\">";
     $card_header = "<div style=\"display: flex; justify-content: space-between\" class=\"card-header\">";
-    $user = "<div><i class=\"bi bi-caret-right-fill\">$username</i></div>";
+    $user = "<div><i class=\"bi bi-caret-right-fill\"></i>$username</div>";
     $img = "<img class=\"img-fluid\" src=\"" . htmlspecialchars($img) . "\"><br>";
     $icon = "";
     if (isset($_SESSION["account"]))
-        $icon = "<i style=\"margin-left: 5px;\" id=\"like_$gallery_id\" class=\"$class\" onclick=\"$function\">" . htmlspecialchars($likes) . "</i><br>";
+        $icon = "<div><i style=\"margin-left: 5px;\" id=\"like_$gallery_id\" class=\"$class\" onclick=\"$function\"></i><span class=\"app-post-likes\" id=\"likes_$gallery_id\">" . htmlspecialchars($likes) . "</span></div>";
     $comment_link = "<a href=\"comments.php?gallery_id=" . htmlspecialchars($gallery_id) . "\">Comments</a>";
     return $container . "\n" . $card_header . "\n" . $user . "\n" . $delete_icon . "</div>\n" . $img . "\n" . $icon . "\n" . $comment_link . "</div>";
 }
@@ -139,7 +139,7 @@ function    getUserByEmail($email)
 // Get member (member_id) posts
 function    getUserPosts($pdo, $member_id)
 {
-    $sql_query = "SELECT * FROM gallery WHERE member_id=:mb_id";
+    $sql_query = "SELECT username, gallery.* FROM gallery INNER JOIN members ON gallery.member_id=members.member_id WHERE gallery.member_id = :mb_id ORDER BY gallery_id";
     $stmt = $pdo->prepare($sql_query);
     $stmt->execute(array(
         ":mb_id" => $member_id

@@ -20,14 +20,14 @@ function    verifySticker($sticker)
     }
     return (FALSE);
 }
-// Output finale edited img as jpeg file in gallery path.
+// Output finale edited img as png file in gallery path.
 function    generateImgFile($username, $img)
 {
     $gallery_path = "gallery/";
 
-    $photoName = "photo_" . $username . "_" . rand(10, 10000) . ".jpeg";
+    $photoName = "photo_" . $username . "_" . rand(10, 10000) . ".png";
     $photoPath = $gallery_path . $photoName;
-    imagejpeg($img, $photoPath);
+    imagepng($img, $photoPath);
     return ($photoName);
 }
 // Insert Final image into gallery table.
@@ -42,11 +42,16 @@ function    InsertGallery($member_id, $photoName)
 if (isset($_POST["img"]) && isset($_POST["sticker"])) {
     if (($stickerPath = verifySticker($_POST['sticker'])) === FALSE)
         die("Invalid Sticker");
+    if ($_POST["img"] == "")
+        die("Invalid image");
 
+    // Create png img resource for user_photo.
+    $img = @imagecreatefrompng($_POST["img"]);
+    if ($img == false)
+        die("Invalid image");
+
+    // Get Sticker size.
     $stickerSize = getimagesize($stickerPath);
-
-    // Create jpeg img resource for user_photo.
-    $img = imagecreatefromjpeg($_POST["img"]);
 
     $imagewidth = imagesx($img);
     $imageHeight = imagesy($img);
@@ -56,8 +61,6 @@ if (isset($_POST["img"]) && isset($_POST["sticker"])) {
 
     // Create png img resource for sticker.
     $sticker = imagecreatefrompng($stickerPath);
-
-    // Get Sticker size.
 
     // Place sticker in img.
     imagecopy($img, $sticker, ($imagewidth - $stickerSize[0]) / 2, ($imageHeight - $stickerSize[1]) / 2, 0, 0, $stickerSize[0], $stickerSize[1]);

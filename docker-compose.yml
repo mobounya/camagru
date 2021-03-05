@@ -1,16 +1,33 @@
-version: "3.3"
+version: "3"
 
 services:
-  camagru:
-    build: ./
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: toor
+      MYSQL_DATABASE: db_camagru
+
+  pma:
+    image: phpmyadmin/phpmyadmin
     ports:
       - 8080:80
-      - 1080:1080
-      - 443:443
-    volumes:
-      - ./:/app
-      - database:/var/lib/mysql
     environment:
-      MYSQL_ADMIN_PASS: toor
+      PMA_HOST: mysql
 volumes:
-  database:
+  mysql-data:

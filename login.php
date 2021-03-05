@@ -45,13 +45,13 @@ if (isset($_SESSION["account"])) {
 </head>
 
 <body>
-    <div style="margin-top: 50px; margin-left: 20px">
-        <form method="POST">
+    <main class="container pt-2">
+        <div style="margin-top: 50px; margin-left: 20px">
             <h2 style="margin-bottom : 30px"> Please Log-in or Create a new account </h2>
+            <?php
+            flashMessage();
+            ?>
             <div style="display: inline-block;">
-                <?php
-                flashMessage();
-                ?>
                 <form method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
@@ -66,10 +66,10 @@ if (isset($_SESSION["account"])) {
                         <button type="submit" class="btn btn-primary mb-3">Log-in</button>
                     </div>
                 </form>
+                <a href="register.php"> <button class="btn btn-primary mb-3">Create account</button> </a>
             </div>
-            <form action="./register.php" method="GET">
-                <button type="submit" class="btn btn-primary mb-3">Create account</button>
-            </form>
+        </div>
+    </main>
 </body>
 
 </html>
