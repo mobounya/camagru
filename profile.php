@@ -85,12 +85,13 @@ else
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+    <link href="styling/app.css" rel="stylesheet">
     <title><?= $profile["username"] ?> Profile</title>
 </head>
 
 <body>
     <main class="container">
-        <div class="ft_navbar">
+        <div class="app-navbar">
             <ul class="nav nav-pills">
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
@@ -149,6 +150,9 @@ else
             </form>
         </div>
     </main>
+    <?php
+    require_once("footer.php");
+    ?>
 </body>
 <script type="text/javascript" src="js/utils.js"></script>
 

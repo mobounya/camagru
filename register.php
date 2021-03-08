@@ -86,7 +86,7 @@ if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["pass"])
 </head>
 
 <body>
-    <div style="display: inline-block; margin-top: 50px; margin-left: 30px">
+    <div class="py-5" style="width: 50%; margin: auto;">
         <h2>Create an account</h2>
         <?php
         flashMessage();

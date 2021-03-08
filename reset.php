@@ -66,7 +66,7 @@ if (isset($_POST["email"])) {
 </head>
 
 <body>
-    <div style="display: inline-block;">
+    <div class="py-5" style="width: 50%; margin: auto;">
         <?php
         flashMessage();
         ?>
@@ -77,7 +77,7 @@ if (isset($_POST["email"])) {
             </div>
             <button class="btn btn-primary">Reset</button>
         </form>
-        <div>
+    </div>
 </body>
 
 </html>

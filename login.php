@@ -45,7 +45,7 @@ if (isset($_SESSION["account"])) {
 </head>
 
 <body>
-    <main class="container pt-2">
+    <main class="container pt-2" style="display: flex; justify-content: center;">
         <div style="margin-top: 50px; margin-left: 20px">
             <h2 style="margin-bottom : 30px"> Please Log-in or Create a new account </h2>
             <?php
@@ -62,11 +62,9 @@ if (isset($_SESSION["account"])) {
                         <input type="password" class="form-control" id="password" name="pass">
                         <a style="margin-top: 0px;" href="reset.php"> Reset password </a>
                     </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mb-3">Log-in</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary mb-3">Log-in</button>
+                    <a href="register.php" class="btn btn-primary mb-3">Create account</a>  
                 </form>
-                <a href="register.php"> <button class="btn btn-primary mb-3">Create account</button> </a>
             </div>
         </div>
     </main>

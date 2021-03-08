@@ -38,9 +38,6 @@ if (isset($_SESSION["username"]))
                 <li class="nav-item">
                     <a class="nav-link" href="app.php">App</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $path ?>"><?= $pageName ?></a>
-                </li>
                 <?php
                 if (isset($_SESSION["account"])) :
                 ?>
@@ -50,6 +47,9 @@ if (isset($_SESSION["username"]))
                 <?php
                 endif;
                 ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $path ?>"><?= $pageName ?></a>
+                </li>
             </ul>
         </div>
         <?php
@@ -116,6 +116,9 @@ if (isset($_SESSION["username"]))
             </nav>
         </div>
     </main>
+    <?php
+    require_once("footer.php");
+    ?>
     <script type="text/javascript" src="js/like.js"></script>
 </body>
 
